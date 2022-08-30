@@ -86,6 +86,16 @@ router.post("/register", async (req, res, next) =>
                 )
             }
 
+            if (req.query.phone.length != 10)
+            {
+                return res.json(
+                    {
+                        verdict: 0,
+                        message: "The phone number should be 10 of digit"
+                    }
+                )
+            }
+
             var new_entry = new Users()
 
             new_entry.name = req.query.name
