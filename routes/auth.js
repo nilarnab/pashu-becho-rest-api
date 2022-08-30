@@ -10,11 +10,12 @@ require('dotenv').config();
 
 router.post("/login", async (req, res, next) => 
 {
-    var user = await Users.findOne({ email : req.query.email })
+    var user = await Users.find({ email : req.query.email })
+    console.log(user)
 
     if (user.length == 1)
     {
-        var verdict = await bcrypt.compare(req.query.password, user.password)
+        var verdict = await bcrypt.compare(req.query.password, user[0].password)
         return res.json(
             {
                 verdict: verdict,
@@ -36,7 +37,7 @@ router.post("/login", async (req, res, next) =>
         return res.json(
             {
                 verdict: -1,
-                message: "ERROR: duplicate mail found"
+                message: "ERROR: duplicate mail found " + user.length
             }
         )
     }
