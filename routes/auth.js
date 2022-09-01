@@ -8,6 +8,12 @@ const Users = require('../models/Users')
 require('dotenv').config();
 
 
+
+router.get("/test", async (req, res, next) => 
+{
+    return res.sendFile("../red_lady.jpg")
+})
+
 router.post("/login", async (req, res, next) => 
 {
     var user = await Users.find({ email : req.query.email })
