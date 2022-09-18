@@ -10,6 +10,11 @@ require('dotenv').config();
 
 const validator = require('validator')
 
+/*
+    Database of inventory
+
+
+*/
 
 router.get("/test", async (req, res, next) => {
     return res.sendFile(path.resolve("red_lady.jpg"))
@@ -17,6 +22,5 @@ router.get("/test", async (req, res, next) => {
 
 
 router.post("/alter", async (req, res, next) => {
-
 
 })
