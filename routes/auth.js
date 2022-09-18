@@ -5,13 +5,14 @@ const { json } = require('express/lib/response');
 const bcrypt = require("bcryptjs");
 const router = express.Router();
 const Users = require('../models/Users')
+var path = require('path');
 require('dotenv').config();
 
 
 
 router.get("/test", async (req, res, next) => 
 {
-    return res.sendFile("../red_lady.jpg")
+    return res.sendFile(path.resolve("red_lady.jpg"))
 })
 
 router.post("/login", async (req, res, next) => 

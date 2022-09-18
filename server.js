@@ -22,12 +22,14 @@ app.use(express.urlencoded(
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res, next) => {
-    
+
     console.log(req.query)
     res.send("Pre login");
 })
 
 const authRouter = require('./routes/auth.js');
+const streamRouter = require('./routes/stream.js');
 app.use("/auth", authRouter)
+app.use('/stream', streamRouter)
 
 app.listen(process.env.PORT || 3000)
