@@ -12,6 +12,7 @@ require('dotenv').config();
 // for streaming service
 
 router.get('/get_video', async (req, res, next) => {
+    const id = req.query.id;
     console.log(process.env.UPLOADS_VID_HIGH)
     console.log(path.resolve(__dirname + "/../"))
     return res.sendFile(process.env.UPLOADS_VID_HIGH + "batman_dark_knight_trailer.mp4", { root: path.resolve(__dirname + "/../") })
