@@ -29,7 +29,10 @@ app.get('/', (req, res, next) => {
 
 const authRouter = require('./routes/auth.js');
 const streamRouter = require('./routes/stream.js');
+const phoneVerfiyRouter = require('./routes/phoneVerify');
+
 app.use("/auth", authRouter)
 app.use('/stream', streamRouter)
+app.use("/phoneVerify", phoneVerfiyRouter)
 
 app.listen(process.env.PORT || 3000)
