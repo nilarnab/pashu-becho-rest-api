@@ -51,4 +51,43 @@ router.get('/reset_otp', async (req, res, next) =>
 })
 
 
+router.get("/verify_otp", async (req, res, next) => 
+{
+    /*
+    accepting parameters
+    1. user_id (str)
+    2. pin (str)
+
+    retunrns true if user_id matches the pin
+    */
+
+    var user_id = req.query.user_id
+    var pin = req.query.pin
+
+    var current_pin = await Otps.find({
+        user_id: user_id
+    })
+
+    if (current_pin.length > 0)
+    {
+        if (pin == current_pin[0]["pin"])
+        {
+            return res.json(
+                {
+                    verdict: 1,
+                    message: "OTP ok"
+                }
+            )
+        }
+    }
+
+    return res.json(
+        {
+            verdict: 0,
+            message: "OTP incorrect"
+        }
+    )
+})
+
+
 module.exports = router
