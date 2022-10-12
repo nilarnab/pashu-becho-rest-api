@@ -50,6 +50,7 @@ app.listen(process.env.PORT || 3000);
 /*
 
 
+
 required end points
 for each product -> 
 add to cart --> what quantity 
@@ -68,4 +69,6 @@ cart structure
     qnt: (int)
     valid: (int) -> 0 or 1 ()
 }
+
 */
+
