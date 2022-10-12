@@ -38,15 +38,17 @@ const streamRouter = require("./routes/stream.js");
 const phoneVerfiyRouter = require("./routes/phoneVerify");
 const handleCartOps = require("./routes/handleCartOps");
 const productRouter = require("./routes/products.js");
+
 app.use("/auth", authRouter);
 app.use("/stream", streamRouter);
-app.use("/products", productRouter);
 app.use("/phoneVerify", phoneVerfiyRouter);
 app.use("/handleCartOps", handleCartOps);
+app.use("/products", productRouter);
 
 app.listen(process.env.PORT || 3000);
 
 /*
+
 required end points
 for each product -> 
 add to cart --> what quantity 
@@ -54,7 +56,10 @@ add to cart --> what quantity
     id (int)
     qnt (int)
 }
+
 will be added to the cart
+
+
 cart structure
 {
     user_id: (str)
