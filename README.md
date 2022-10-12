@@ -44,6 +44,90 @@
 | verdict  | bool   | true if success, false if not |
 | message  | string | reason of verdict             |
 
+
+### Handle Cart Operation
+
+```http
+  POST /handleCartOps/show_items
+```
+
+#### Query
+
+| Parameter  | Type     | Description  |
+| :--------- | :------- | :----------- |
+| `user_id`  | `string` |              |
+
+
+#### Response
+
+| Response | Type   | Description                   |
+| :------- | :----- | :---------------------------- |
+| verdict  | bool   | 1 if success, 0 if not |
+| data     | json   | all the valid cart items      |
+| message  | string | reason of verdict             |
+
+
+```http
+  POST /handleCartOps/insert
+```
+
+#### Query
+
+| Parameter  | Type     | Description  |
+| :--------- | :------- | :----------- |
+| `user_id`  | `string` |              |
+| `prod_id`  | `string` |              |
+| `qnt`      | `Number` | |
+
+#### Response
+
+| Response | Type   | Description                   |
+| :------- | :----- | :---------------------------- |
+| verdict  | bool   | 1 if success, 0 if not |
+| data     | json   | response     |
+| message  | string | reason of verdict             |
+
+```http
+  POST /handleCartOps/alter
+```
+
+#### Query
+
+| Parameter  | Type     | Description  |
+| :--------- | :------- | :----------- |
+| `cart_id`  | `string` |              |
+| `qnt_new`  | `Number` | New quantity          |
+
+
+#### Response
+
+| Response | Type   | Description                   |
+| :------- | :----- | :---------------------------- |
+| verdict  | bool   | 1 if success, 0 if not |
+| data     | json   | response     |
+| message  | string | reason of verdict             |
+
+
+```http
+  POST /handleCartOps/purge
+```
+
+#### Query
+
+| Parameter  | Type     | Description  |
+| :--------- | :------- | :----------- |
+| `cart_id`  | `string` | cart id to be deleted             |
+
+
+#### Response
+
+| Response | Type   | Description                   |
+| :------- | :----- | :---------------------------- |
+| verdict  | bool   | 1 if success, 0 if not |
+| data     | json   | response     |
+| message  | string | reason of verdict             |
+
+
 ## Contributing
 
 Currently private
