@@ -33,21 +33,22 @@ app.get("/", (req, res, next) => {
   res.send("Pre login");
 });
 
-const authRouter = require("./routes/auth.js");
-const streamRouter = require("./routes/stream.js");
-const phoneVerfiyRouter = require("./routes/phoneVerify");
-const handleCartOps = require("./routes/handleCartOps");
+const authRouter = require('./routes/auth.js');
+const streamRouter = require('./routes/stream.js');
+const phoneVerfiyRouter = require('./routes/phoneVerify');
+const handleCartOps = require('./routes/handleCartOps');
 const productRouter = require("./routes/products.js");
 
-app.use("/auth", authRouter);
-app.use("/stream", streamRouter);
-app.use("/phoneVerify", phoneVerfiyRouter);
-app.use("/handleCartOps", handleCartOps);
+app.use("/auth", authRouter)
+app.use('/stream', streamRouter)
+app.use("/phoneVerify", phoneVerfiyRouter)
+app.use("/handleCartOps", handleCartOps)
 app.use("/products", productRouter);
 
 app.listen(process.env.PORT || 3000);
 
 /*
+
 
 required end points
 for each product -> 
