@@ -7,13 +7,13 @@ const router = express.Router();
 const Users = require('../models/Users')
 const Otps = require('../models/Otps')
 const Carts = require('../models/Carts')
+const Products = require('../models/Product')
 var path = require('path');
 const { randomFillSync } = require('crypto');
 require('dotenv').config();
 
 
-router.post("/show_items", async (req, res, next) => 
-{
+router.post("/show_items", async (req, res, next) => {
     /*
     Accepts parameters
 
@@ -21,19 +21,36 @@ router.post("/show_items", async (req, res, next) =>
 
     show all the cart items of a user id
     
-    */ 
+    */
 
-    if(req.query.user_id)
-    {
-        var response = await Carts.find({user_id: req.query.user_id, valid: 1})
+    var response = {}
 
-        return res.json({
-            verdict: 1,
-            data: response
-        })
+    if (req.query.user_id) {
+        var cart_items = await Carts.find({ user_id: req.query.user_id, valid: 1 })
+        response["cart_items"] = []
+        for (i = 0; i < cart_items.length; i++) {
+            var product = await Products.findById(cart_items[i]["prod_id"])
+
+            var prod_obj = {}
+            prod_obj[cart_items[i]["prod_id"]] = product
+            prod_obj["qnt"] = cart_items[i]["qnt"]
+            response["cart_items"].push(prod_obj)
+        }
+
+        // cart_items.forEach(async (data, i) => {
+        //     cart_items[i]["product"] = await Product.findById(req.query.user_id)
+        // })
+
+        return res.json(
+            {
+                verdict: 1,
+                response
+            }
+        )
+
+
     }
-    else
-    {
+    else {
         return res.json({
             verdict: 0,
             message: "Invalid fields",
@@ -42,7 +59,7 @@ router.post("/show_items", async (req, res, next) =>
     }
 
 
-    
+
 })
 
 router.post("/insert", async (req, res, next) => {
@@ -58,8 +75,7 @@ router.post("/insert", async (req, res, next) => {
     
     */
 
-    if(req.query.user_id && req.query.prod_id && req.query.qnt)
-    {
+    if (req.query.user_id && req.query.prod_id && req.query.qnt) {
         var new_cart = new Carts()
 
         new_cart.user_id = req.query.user_id
@@ -74,8 +90,7 @@ router.post("/insert", async (req, res, next) => {
             response: response
         })
     }
-    else
-    {
+    else {
         return res.json({
             verdict: 0,
             message: "Invalid fields",
@@ -96,13 +111,11 @@ router.post("/alter", async (req, res, next) => {
     
     */
 
-    if(req.query.cart_id && req.query.qnt_new)
-    {
+    if (req.query.cart_id && req.query.qnt_new) {
 
         var cart_ids = await Carts.findById(req.query.cart_id)
 
-        if (cart_ids.length == 0)
-        {
+        if (cart_ids.length == 0) {
             return req.json({
                 verdict: 0,
                 message: "No such Cart item exists",
@@ -110,7 +123,7 @@ router.post("/alter", async (req, res, next) => {
             })
         }
 
-        var response = await Carts.findByIdAndUpdate(req.query.cart_id, {qnt: req.query.qnt_new})
+        var response = await Carts.findByIdAndUpdate(req.query.cart_id, { qnt: req.query.qnt_new })
 
         return res.json({
             verdict: 1,
@@ -118,45 +131,41 @@ router.post("/alter", async (req, res, next) => {
             data: response
         })
     }
-    else
-    {
+    else {
         return res.json({
             verdict: 0,
             message: "Invalid fields",
             data: null
         })
     }
-    
+
 
 
 })
 
 router.post("/purge", async (req, res, next) => {
 
-    if(req.query.cart_id)
-    {
+    if (req.query.cart_id) {
         var cart_ids = await Carts.findById(req.query.cart_id)
 
-        if (cart_ids.length == 0)
-        {
+        if (cart_ids.length == 0) {
             return req.json({
                 verdict: 0,
                 message: "No such Cart item exists",
                 data: null
             })
         }
-        
-        var response = await Carts.findByIdAndUpdate(req.query.cart_id, {valid: 1})
+
+        var response = await Carts.findByIdAndUpdate(req.query.cart_id, { valid: 1 })
 
         return res.json({
             verdict: 1,
             message: "Success in purge",
             data: response
         })
-        
+
     }
-    else
-    {
+    else {
         return res.json({
             verdict: 0,
             message: "Invalid fields",
