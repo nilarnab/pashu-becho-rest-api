@@ -122,7 +122,7 @@ router.post("/alter", async (req, res, next) => {
         console.log(cart_ids);
         try {
             if (cart_ids.length == 0) {
-                return req.json({
+                return res.send({
                     verdict: 0,
                     message: "No such Cart item exists",
                     data: null
