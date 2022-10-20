@@ -36,7 +36,7 @@ router.post("/show_items", async (req, res, next) => {
 
             console.log("making items")
             var prod_obj = {}
-            prod_obj[cart_items[i]["prod_id"]] = product
+            prod_obj[cart_items[i]._id.toString()] = product
             prod_obj["qnt"] = cart_items[i]["qnt"]
             response["cart_items"].push(prod_obj)
         }
