@@ -13,7 +13,7 @@ const { randomFillSync } = require('crypto');
 require('dotenv').config();
 
 
-router.get("/show_items", async (req, res, next) => {
+router.post("/show_items", async (req, res, next) => {
     /*
     Accepts parameters
 
