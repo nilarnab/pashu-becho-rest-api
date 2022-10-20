@@ -120,7 +120,7 @@ router.post("/alter", async (req, res, next) => {
 
     if (req.query.cart_id && req.query.qnt_new) {
         console.log("parameters ok")
-        var cart_ids = await Carts.findById(req.query.cart_id)
+        var cart_ids = await Carts.findById(req.query.cart_id).clone()
 
         if (cart_ids.length == 0) {
             return req.json({
