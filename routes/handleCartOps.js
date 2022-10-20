@@ -118,13 +118,8 @@ router.post("/alter", async (req, res, next) => {
 
     if (req.query.cart_id && req.query.qnt_new) {
 
-        var cart_ids = await Carts.findById(req.query.cart_id, (err, result) => {
-            if (err) { console.log(err) }
-            else {
-                console.log(result)
-            }
-        }
-        )
+        var cart_ids = await Carts.find({ _id: req.query.cart_id })
+        console.log(cart_ids);
         try {
             if (cart_ids.length == 0) {
                 return req.json({
