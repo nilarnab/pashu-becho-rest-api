@@ -44,9 +44,9 @@ app.use('/stream', streamRouter)
 app.use("/phoneVerify", phoneVerfiyRouter)
 app.use("/handleCartOps", handleCartOps)
 app.use("/products", productRouter);
-
-app.listen(process.env.PORT || 3000);
-
+const port = process.env.PORT || 3000;
+app.listen(port);
+console.log(`app is listening at ${port}`)
 /*
 
 
