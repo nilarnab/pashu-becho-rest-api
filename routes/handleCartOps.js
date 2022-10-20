@@ -115,9 +115,11 @@ router.post("/alter", async (req, res, next) => {
     changes the qnt value of a cart item
     
     */
+   console.log("received")
+   console.log(req.query)
 
     if (req.query.cart_id && req.query.qnt_new) {
-
+        console.log("parameters ok")
         var cart_ids = await Carts.findById(req.query.cart_id)
 
         if (cart_ids.length == 0) {
