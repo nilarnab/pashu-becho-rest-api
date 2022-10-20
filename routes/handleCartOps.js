@@ -118,16 +118,25 @@ router.post("/alter", async (req, res, next) => {
 
     if (req.query.cart_id && req.query.qnt_new) {
 
-        var cart_ids = await Carts.findById(req.query.cart_id)
-
-        if (cart_ids.length == 0) {
-            return req.json({
-                verdict: 0,
-                message: "No such Cart item exists",
-                data: null
-            })
+        var cart_ids = await Carts.findById(req.query.cart_id, (err, result) => {
+            if (err) { console.log(err) }
+            else {
+                console.log(result)
+            }
         }
-
+        )
+        try {
+            if (cart_ids.length == 0) {
+                return req.json({
+                    verdict: 0,
+                    message: "No such Cart item exists",
+                    data: null
+                })
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
         var response = await Carts.findByIdAndUpdate(req.query.cart_id, { qnt: req.query.qnt_new })
 
         return res.json({
