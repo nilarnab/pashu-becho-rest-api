@@ -123,7 +123,7 @@ router.post("/alter", async (req, res, next) => {
         var cart_ids = await Carts.findById(req.query.cart_id).clone()
 
         if (cart_ids.length == 0) {
-            return req.json({
+            return res.json({
                 verdict: 0,
                 message: "No such Cart item exists",
                 data: null
