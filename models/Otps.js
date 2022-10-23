@@ -3,7 +3,7 @@ const { default: mongoose } = require('mongoose')
 const mongo = require('mongoose')
 
 const otpSchema = new mongo.Schema({
-    user_id: {
+    phone_num: {
         type: String,
         required: true
     },
