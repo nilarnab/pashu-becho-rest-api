@@ -104,12 +104,21 @@ router.get("/verify_otp", async (req, res, next) => {
 
     if (current_pin.length > 0) {
         if (pin == current_pin[0]["pin"]) {
+
+            await Otps.deleteMany({
+                phone_num: phone_num
+            })
+
+            
             return res.json({
                 verdict: 1,
                 message: "OTP ok"
             })
         }
     }
+    
+
+    
 
     return res.json({
         verdict: 0,

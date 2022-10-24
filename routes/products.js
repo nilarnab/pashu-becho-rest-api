@@ -34,6 +34,42 @@ router.get("/getAllProducts", async (req, res, next) => {
   }
 });
 
+router.get("/get_product", async (req, res, next) => 
+{
+
+  try {
+    
+    if (req.query.prod_id)
+    {
+
+      var prod_id = req.query.prod_id
+      
+      var prod = await Product.findById(prod_id)
+
+      return res.json({
+        verdict: 1,
+        data: prod,
+        message: 'Found prod'
+      })
+      
+    }
+    else {
+
+      return res.json({
+        verdict: 0,
+        message: 'Product id empty'
+      })
+    }
+
+  } catch (err) {
+    return res.status(400).json({
+      status: "Error",
+      message: "Something went wrong !",
+    });
+  }
+  
+})
+
 router.get("/infiniteScroll/:page", async (req, res, next) => {
   const page = req.params.page * 1 || 1;
   const limit = 4;
