@@ -191,3 +191,40 @@ router.post("/googlelogin", async (req, res, next) => {
 });
 
 module.exports = router;
+
+// post request, data ---> phone number , null name, null email
+
+router.post("/numberVerification", async (req,res,next) => {
+  try{
+    const user = await Users.find({phone:req.query.phone})
+  
+  if (user.length != 0){
+    return res.status(200).json({
+      message:"This number already exists !",
+      data:{
+        user
+      }
+    })
+  }
+  else{
+    const newUser = await Users.create({
+      phone:req.query.phone,
+      name:"Null"+Math.random(),
+      email:"Null"+Math.random(),
+      password:"Null"+Math.random(),
+    })
+    return res.status(200).json({
+      verdict:1,
+      message:"New user has been created",
+      data:{
+        newUser
+      }
+    })
+  }
+  }catch(error){
+    return res.status(400).json({
+      verdict:0,
+      message:"Somethinng wrong occured !"
+    })
+  }
+})
