@@ -37,7 +37,8 @@ app.get("/searchItem", async (req, res) => {
   let text = req.query.text;
   if (text) {
     const products = (await Product.find({ tags: { $in: [text] } }, { _id: 1 }));
-    res.send(products)
+    console.log(products)
+    res.json({ mydata: products })
   }
   else {
     res.status(403).send("Enter search text as query");
