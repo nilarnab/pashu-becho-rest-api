@@ -36,7 +36,7 @@ app.get("/", (req, res, next) => {
 app.get("/searchItem", async (req, res) => {
   let text = req.query.text;
   if (text) {
-    const products = (await Product.find({ tags: { $in: [text] } }, { _id: 1 }));
+    const products = (await Product.find({ tags: { $in: [text] } }));
     console.log(products)
     res.json({ mydata: products })
   }
