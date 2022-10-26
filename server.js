@@ -26,12 +26,23 @@ app.use(
   })
 );
 
+const Product = require("./models/Product")
 app.set("view engine", "ejs");
 
 app.get("/", (req, res, next) => {
   console.log(req.query);
   res.send("Pre login");
 });
+app.get("/searchItem", async (req, res) => {
+  let text = req.query.text;
+  if (text) {
+    const products = (await Product.find({ tags: { $in: [text] } }, { _id: 1 }));
+    res.send(products)
+  }
+  else {
+    res.status(403).send("Enter search text as query");
+  }
+})
 
 const authRouter = require('./routes/auth.js');
 const streamRouter = require('./routes/stream.js');
