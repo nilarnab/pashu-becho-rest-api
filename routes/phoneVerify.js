@@ -1,5 +1,7 @@
 const express = require('express');
 const res = require('express/lib/response');
+const Str = require('@supercharge/strings')
+const VerifyToken = require('../models/VerifyToken')
 // middleware = require("../middlewares/auth.js")
 const {
     json
@@ -16,6 +18,33 @@ require('dotenv').config();
 
 const AWS = require('aws-sdk')
 
+router.get("/", async (req, res) => {
+    var mobile_no = req.query.phone_num;
+    let token = Str.random(60);
+    try {
+        await (new VerifyToken({ phone_num: mobile_no, token: token })).save();
+        res.send({ token: token })
+    }
+    catch (err) {
+        console.log(err);
+    }
+});
+
+router.post("/authComplete", async (req, res) => {
+    const token = req.body.token;
+    const uid = req.body.uid;
+    try {
+        VerifyToken.updateOne({ token: token }, { $set: { verified: true, uid: uid } })
+        res.sendStatus(200);
+    }
+    catch (err) {
+        console.log(err);
+    }
+})
+router.get('/waitAuth', async (req, res) => {
+    const token = req.query.token;
+    const resp = await VerifyToken.find({ token: token })
+})
 
 router.get('/reset_otp', async (req, res, next) => {
     /*
@@ -65,8 +94,8 @@ function sendOTP(mobileNo, OTP) {
         PhoneNumber: mobileNo,
     };
     return new AWS.SNS({
-            apiVersion: '2010– 03– 31'
-        }).publish(params).promise()
+        apiVersion: '2010– 03– 31'
+    }).publish(params).promise()
         .then(message => {
             console.log("OTP SEND SUCCESS");
         })
@@ -109,16 +138,16 @@ router.get("/verify_otp", async (req, res, next) => {
                 phone_num: phone_num
             })
 
-            
+
             return res.json({
                 verdict: 1,
                 message: "OTP ok"
             })
         }
     }
-    
 
-    
+
+
 
     return res.json({
         verdict: 0,
