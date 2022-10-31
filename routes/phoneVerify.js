@@ -44,6 +44,8 @@ router.post("/authComplete", async (req, res) => {
 router.get('/waitAuth', async (req, res) => {
     const token = req.query.token;
     const resp = await VerifyToken.find({ token: token })
+    // wait till verified becomes true in VerifyToken model
+    //and send response as {verdict : True/False}
 })
 
 router.get('/reset_otp', async (req, res, next) => {
