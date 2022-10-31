@@ -47,6 +47,10 @@ router.get('/waitAuth', async (req, res) => {
     const resp = await VerifyToken.find({ token: token })
     // wait till verified becomes true in VerifyToken model
     //and send response as {verdict : True/False}
+    // const interval=setInterval(()=>{
+    // },500)
+    res.send({ verdict: true })
+
 })
 
 router.get('/reset_otp', async (req, res, next) => {
