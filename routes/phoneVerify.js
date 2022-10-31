@@ -64,7 +64,7 @@ router.get('/waitAuth', async (req, res) => {
             res.send({ verdict: true })
             clearInterval(interval)
         }
-        else if (time >= 5) {
+        else if (time >= 120) {
             res.send({ verdict: false, msg: "time out" })
             clearInterval(interval)
         }
