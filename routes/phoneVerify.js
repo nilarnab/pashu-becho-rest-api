@@ -30,9 +30,9 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/authComplete", async (req, res) => {
-    const token = req.body.token;
-    const uid = req.body.uid;
+router.get("/authComplete", async (req, res) => {
+    const token = req.query.token;
+    const uid = req.query.uid;
     console.log("completing", token, uid)
     try {
         const arr = await VerifyToken.find({ token: token })
