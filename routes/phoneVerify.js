@@ -33,9 +33,9 @@ router.get("/", async (req, res) => {
 router.post("/authComplete", async (req, res) => {
     const token = req.body.token;
     const uid = req.body.uid;
-    console.log("completing")
+    console.log("completing", token, uid)
     try {
-        VerifyToken.updateOne({ token: token }, { $set: { verified: true, uid: uid } })
+        await VerifyToken.updateOne({ token: token }, { $set: { verified: true, uid: uid } })
         res.sendStatus(200);
     }
     catch (err) {
