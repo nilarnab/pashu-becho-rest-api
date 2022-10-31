@@ -35,21 +35,43 @@ router.post("/authComplete", async (req, res) => {
     const uid = req.body.uid;
     console.log("completing", token, uid)
     try {
-        await VerifyToken.updateOne({ token: token }, { $set: { verified: true, uid: uid } })
-        res.sendStatus(200);
+        const arr = await VerifyToken.find({ token: token })
+        if (arr.length === 1) {
+            console.log(arr)
+            await VerifyToken.updateOne({ token: token }, {
+                $set: { verified: true, uid: uid }
+            })
+            res.sendStatus(200);
+        }
+        else {
+            res.sendStatus(403);
+
+        }
     }
     catch (err) {
         console.log(err);
+        res.sendStatus(404);
     }
 })
 router.get('/waitAuth', async (req, res) => {
     const token = req.query.token;
-    const resp = await VerifyToken.find({ token: token })
     // wait till verified becomes true in VerifyToken model
     //and send response as {verdict : True/False}
-    // const interval=setInterval(()=>{
-    // },500)
-    res.send({ verdict: true })
+    var time = 0;
+    const interval = setInterval(async () => {
+        const resp = await VerifyToken.find({ token: token })
+        if (resp.length == 1 && resp[0].verified) {
+            res.send({ verdict: true })
+            clearInterval(interval)
+        }
+        else if (time >= 5) {
+            res.send({ verdict: false, msg: "time out" })
+            clearInterval(interval)
+        }
+        else {
+            time += 1;
+        }
+    }, 500)
 
 })
 
