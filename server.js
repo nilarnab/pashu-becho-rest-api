@@ -45,17 +45,23 @@ app.get("/searchItem", async (req, res) => {
   }
 })
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const authRouter = require('./routes/auth.js');
 const streamRouter = require('./routes/stream.js');
 const phoneVerfiyRouter = require('./routes/phoneVerify');
 const handleCartOps = require('./routes/handleCartOps');
 const productRouter = require("./routes/products.js");
+const searchRouter = require("./routes/search.js");
 
 app.use("/auth", authRouter)
 app.use('/stream', streamRouter)
 app.use("/phoneVerify", phoneVerfiyRouter)
 app.use("/handleCartOps", handleCartOps)
 app.use("/products", productRouter);
+app.use("/search", searchRouter);
+
 const port = process.env.PORT || 3000;
 app.listen(port);
 console.log(`app is listening at ${port}`)
