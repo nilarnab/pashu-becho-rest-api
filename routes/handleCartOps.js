@@ -81,10 +81,33 @@ router.post("/insert", async (req, res, next) => {
     */
 
     if (req.query.user_id && req.query.prod_id && req.query.qnt) {
-        var new_cart = new Carts()
+        
+        var user_id = req.query.user_id
+        var prod_id = req.query.prod_id
+        var qnt = req.query.qnt
 
-        new_cart.user_id = req.query.user_id
-        new_cart.prod_id = req.query.prod_id
+        var cart_ids = await Carts.find({user_id: user_id, prod_id: prod_id})
+
+        if (cart_ids.length > 0)
+        {
+            
+            var response = await Carts.findOneAndUpdate({
+                user_id: user_id,
+                prod_id: prod_id
+            }, { qnt: qnt})
+            
+
+            return res.json({
+                verdict: 1,
+                message: "Success in changing",
+            })
+
+
+        }
+
+        var new_cart = new Carts()
+        new_cart.user_id = user_id
+        new_cart.prod_id = prod_id
         new_cart.qnt = req.query.qnt
 
         var response = await new_cart.save()
