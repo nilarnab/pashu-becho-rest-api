@@ -55,6 +55,7 @@ const handleCartOps = require('./routes/handleCartOps');
 const productRouter = require("./routes/products.js");
 const searchRouter = require("./routes/search.js");
 const sessionRouter = require("./routes/handleSession")
+const userInfoRouter = require("./routes/userInfo")
 
 app.use("/auth", authRouter)
 app.use('/stream', streamRouter)
@@ -63,6 +64,7 @@ app.use("/handleCartOps", handleCartOps)
 app.use("/products", productRouter);
 app.use("/search", searchRouter);
 app.use("/sessionManage", sessionRouter)
+app.use("/userInfo", userInfoRouter)
 
 const port = process.env.PORT || 3000;
 app.listen(port);
