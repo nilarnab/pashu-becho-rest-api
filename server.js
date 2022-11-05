@@ -54,6 +54,7 @@ const phoneVerfiyRouter = require('./routes/phoneVerify');
 const handleCartOps = require('./routes/handleCartOps');
 const productRouter = require("./routes/products.js");
 const searchRouter = require("./routes/search.js");
+const sessionRouter = require("./routes/handleSession")
 
 app.use("/auth", authRouter)
 app.use('/stream', streamRouter)
@@ -61,32 +62,10 @@ app.use("/phoneVerify", phoneVerfiyRouter)
 app.use("/handleCartOps", handleCartOps)
 app.use("/products", productRouter);
 app.use("/search", searchRouter);
+app.use("/sessionManage", sessionRouter)
 
 const port = process.env.PORT || 3000;
 app.listen(port);
 console.log(`app is listening at ${port}`)
-/*
 
-
-
-required end points
-for each product -> 
-add to cart --> what quantity 
-{
-    id (int)
-    qnt (int)
-}
-
-will be added to the cart
-
-
-cart structure
-{
-    user_id: (str)
-    id: (int)
-    qnt: (int)
-    valid: (int) -> 0 or 1 ()
-}
-
-*/
 
