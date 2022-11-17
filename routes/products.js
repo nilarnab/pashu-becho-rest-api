@@ -71,6 +71,8 @@ router.get("/get_product", async (req, res, next) =>
 })
 
 router.get("/infiniteScroll/:page", async (req, res, next) => {
+  console.log("got")
+  console.log(req.params)
   const page = req.params.page * 1 || 1;
   const limit = 4;
   const skip_val = (page - 1) * limit * 1;
