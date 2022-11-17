@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/Product");
+const ProdResource = require("../models/ProdResource");
+const { query } = require("express");
 
 router.post("/createProducts", async (req, res, next) => {
   try {
@@ -43,8 +45,23 @@ router.get("/get_product", async (req, res, next) =>
     {
 
       var prod_id = req.query.prod_id
+      console.log(prod_id)
       
       var prod = await Product.findById(prod_id)
+
+      var image = await ProdResource.find({
+        prod_id: prod_id,
+        primary: 1,
+        type: 'IMG'
+      })
+
+      console.log(image[0]['url'])
+
+      if (image.length)
+      {
+        prod['image'] = image[0]['url'] 
+      }
+      // prod['image'] = 'image'
 
       return res.json({
         verdict: 1,
@@ -77,21 +94,52 @@ router.get("/infiniteScroll/:page", async (req, res, next) => {
   const limit = 4;
   const skip_val = (page - 1) * limit * 1;
 
-  query = await Product.find().skip(skip_val).limit(limit);
+  var query = await Product.find().skip(skip_val).limit(limit);
 
-  if (query.length == 0) {
-    return res.status(200).json({
-      message: "Success",
-      query,
-      extra_message: "LIMIT EXCEEDED",
-    });
-  } else {
-    return res.status(200).json({
-      message: "Success",
-      query,
-      extra_message: "LIMIT NOT EXCEEDED",
-    });
-  }
+  query.forEach(async (item, index) => {
+
+    console.log(item._id.toString())
+
+    var image = await ProdResource.find({
+      prod_id: item._id.toString(),
+      primary: 1,
+      type: 'IMG'
+    })
+
+    
+
+    var image_val = 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-collection-1_large.png?format=webp&v=1530129113'
+    
+    if (image.length)
+    {
+      image_val = image[0]['url'] 
+    }
+
+    console.log(image_val)
+
+    query[index].image = image_val
+
+    if (index == query.length - 1)
+    {
+
+      if (query.length == 0) {
+        return res.status(200).json({
+          message: "Success",
+          query,
+          extra_message: "LIMIT EXCEEDED",
+        });
+      } else {
+        return res.status(200).json({
+          message: "Success",
+          query,
+          extra_message: "LIMIT NOT EXCEEDED",
+        });
+      }
+
+    }
+  });
+
+  
 
   try {
   } catch (err) {
