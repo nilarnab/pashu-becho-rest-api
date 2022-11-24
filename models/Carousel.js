@@ -11,8 +11,12 @@ CarouselSchema = new Schema( {
 		required:true
 
 	},
-	image:String
+	image:String,
 	
+	
+},
+{
+	collection:CarouselData
 }),
 Carousel = mongoose.model('Carousel', CarouselSchema);
 
