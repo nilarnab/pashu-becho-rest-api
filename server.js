@@ -59,6 +59,8 @@ const sessionRouter = require("./routes/handleSession")
 const userInfoRouter = require("./routes/userInfo")
 const carouselRouter = require('./routes/carousel_img');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/carousel", carouselRouter)
+
 app.use("/auth", authRouter)
 app.use('/stream', streamRouter)
 app.use("/phoneVerify", phoneVerfiyRouter)
@@ -67,8 +69,8 @@ app.use("/products", productRouter);
 app.use("/search", searchRouter);
 app.use("/sessionManage", sessionRouter)
 app.use("/userInfo", userInfoRouter)
-app.use("/carousel", carouselRouter)
-("/carousimg", Carousel)
+
+
 const port = process.env.PORT || 3000;
 app.listen(port);
 console.log(`app is listening at ${port}`)
