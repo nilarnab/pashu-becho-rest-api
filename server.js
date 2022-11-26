@@ -57,6 +57,9 @@ const productRouter = require("./routes/products.js");
 const searchRouter = require("./routes/search.js");
 const sessionRouter = require("./routes/handleSession")
 const userInfoRouter = require("./routes/userInfo")
+const carouselRouter = require('./routes/carousel_img');
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/carousel", carouselRouter)
 
 app.use("/auth", authRouter)
 app.use('/stream', streamRouter)
@@ -66,6 +69,7 @@ app.use("/products", productRouter);
 app.use("/search", searchRouter);
 app.use("/sessionManage", sessionRouter)
 app.use("/userInfo", userInfoRouter)
+
 
 const port = process.env.PORT || 3000;
 app.listen(port);
