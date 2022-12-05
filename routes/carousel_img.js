@@ -1,86 +1,64 @@
-const { Router } = require('express');
+
 const express= require('express');
-const { body } = require('express-validator');
+const path=require("path");
 const multer= require('multer');
-const Carousel =require('../models/Carousel');
-const Image = require('../models/Carouselimg');
+const Carousels =require('../models/Carousel');
+
+
+const uploadPath = path.join("public", 'Carousels.ImagePath');
 const router =express.Router();
-const fs= require('fs');
-
-
 const storageImage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploaded/Carouselimages/');
-    },
+    destination: uploadPath,
     filename: (req, file, cb) => {
-        const fname = `image_${(new Date).getTime()}.${file.mimetype.replace('image/', '')}`
-        cb(null, fname);
-        req.fname = 'Carouselimages/' + fname;
-    }
+        cb(null, `${Date.now()}--${file.originalname}`);
+      }
 });
-const carouselImage=multer({ storage: storageImage }).single("image");
+const upload=multer({ storage: storageImage }).single("img");
 
 
-const addCarousel = async (req, res, next) => {
-    // const errorMessage = validatorFunctions.validators(req, res);
-    // console.log('Retrieved errorMessage', errorMessage);
-    // if (errorMessage) {
-    //     return res.status(422).json({ message: 'Validation error', error: errorMessage });
-    // }
+const addCarousel = async (req, res) => {
+    
     if (!req.file) {
         return res.status(422).json({ message: 'Please add an image!' });
     }
-    try {
-        newcardImage = await Image({ imagePath: req.fname }).save()
-        const newcardImage = new Carousel({
-            name: req.body.name,
-            body: req.body.body,
-            image: newImage._id,
-        })
-        await newcardImage.save();
-        next();
-    }
-    catch (error) {
-        console.log(error);
-
-    }
-}
+    
+        const filename = req.file != null ? req.file.filename : null;
+        const newcardImage = new Carousels({
+            title: req.body.title,
+            bodies: req.body.bodies,
+            img:filename 
+        });
+        await newcardImage.save()
+        .then((result) => {
+            console.log(result);
+            res.status(201).json({
+              message: "Image Posted",
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500).json({
+              error: err,
+            });
+          });
+};
 
 router.route
-('uploadCarousel')
-.post(carouselImage,
-    addCarousel,
-    async (req,res)=>{
-        const imagePath = req.fname;
-        const Imagepath = fs.readFileSync(imagePath);
-        res.status(200).send("Images Added Successfully");
-        try{
-            const uploadedImage = new carouselImage({
-                Key: req.file.filename,
-                body: Imagepath,
-            }).promise()
-            
-            fs.unlinkS  
-            await uploadedImage.save();
-        }
-        catch (err) {
-            console.log("Uploding to database Failed", err);
-        }
-    
-    });
+("/uploadCarousel")
+.post(upload,
+    addCarousel
+    );
     router.route("/getAllImages").get( async (req, res, next) => {
-        try {
-          const allImages = await Carousel.find();
-          res.status(200).json({
-            status: "Success",
-            allImages,
-          });
-        } catch (err) {
-          return res.status(400).json({
-            status: "Error",
-            message: "Something went wrong !",
-          });
-        }
-      });
+      console.log("getting found");
+      try {
+        const data = await Carousels.find();
+        console.log(data);
+        res.status(200).send(data);
+      } catch (error) {
+        console.log("error", error);
+        res.status(500).json({ message: "Recovery failed!" });
+      }
+    });
+      
 
       module.exports=router;

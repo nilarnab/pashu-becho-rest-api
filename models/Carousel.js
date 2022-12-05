@@ -1,23 +1,25 @@
 let mongoose = require('mongoose');
-let Schema = mongoose.Schema;
 
-CarouselSchema = new Schema( {
+const path = require("path");
+const ImagePath = "CarouselImages";
+ const CarouselSchema = new mongoose.Schema({
 	title:{
 		 type: String,
 		 require:true
 	},
-	body:{
+	bodies:{
 		type:String,
 		required:true
 
 	},
-	image:String,
-	
-	
-},
-{
-	collection:"CarouselData"
-}),
-Carousel = mongoose.model('Carousel', CarouselSchema);
-
+	img:{
+		type:String,
+		required:true
+	}
+});
+CarouselSchema.virtual("ImagePath").get(function () {
+    return path.join("/", ImagePath, this.img);
+  });
+  const Carousel = mongoose.model('Carousel', CarouselSchema);
+module.exports.ImagePath=ImagePath;
 module.exports = Carousel;

@@ -1,6 +1,7 @@
 const express = require("express");
 const res = require("express/lib/response");
 const session = require("express-session");
+const path = require('path');
 require("dotenv").config();
 const app = express();
 const bodyParser = require("body-parser");
@@ -44,7 +45,8 @@ app.get("/searchItem", async (req, res) => {
     res.status(403).send("Enter search text as query");
   }
 })
-
+app.use(express.static(__dirname + "public")); //Serves resources from public folder
+app.use("/images", express.static(__dirname + "/public/CarouselImages"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -57,8 +59,7 @@ const productRouter = require("./routes/products.js");
 const searchRouter = require("./routes/search.js");
 const sessionRouter = require("./routes/handleSession")
 const userInfoRouter = require("./routes/userInfo")
-const carouselRouter = require('./routes/carousel_img');
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const carouselRouter = require('./routes/carousel_img')
 app.use("/carousel", carouselRouter)
 
 app.use("/auth", authRouter)
