@@ -130,4 +130,4 @@
 
 ## Contributing
 
-Currently private
+we will be adding more 
