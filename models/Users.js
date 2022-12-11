@@ -6,12 +6,10 @@ var crypto = require('crypto');
 const UsersSchema = new mongo.Schema({
     name: {
         type: String,
-        required: true
     },
     email: {
         type: String,
         unique: true,
-        required: true
     },
     phone: {
         type: String,
@@ -19,15 +17,6 @@ const UsersSchema = new mongo.Schema({
     },
     password: {
         type: String,
-        required: true,
-    },
-    phone_verified: {
-        type: Number,
-        default: 0
-    },
-    mail_verified: {
-        type: Number,
-        default: 0
     },
     enabled: 
     {

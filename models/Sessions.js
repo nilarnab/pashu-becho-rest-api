@@ -7,6 +7,14 @@ const sessionSchema = new mongo.Schema({
         type: String,
         required: true
     },
+    uuid: {
+        type: String,
+        required: true
+    },
+    phonenum: {
+        type: String,
+        required: true
+    },
     timestamp: {
         type: String,
         required: true
@@ -15,8 +23,8 @@ const sessionSchema = new mongo.Schema({
         type: String,
     },
     alive: {
-        type: Boolean,
-        default: true
+        type: Number,
+        default: 1
     },
 
 })

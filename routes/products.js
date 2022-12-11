@@ -109,19 +109,19 @@ router.get("/infiniteScroll/:page", async (req, res, next) => {
     
 
     var image_val = 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-collection-1_large.png?format=webp&v=1530129113'
-    
+
     if (image.length)
     {
       image_val = image[0]['url'] 
     }
 
-    console.log(image_val)
+    query[index].image_val = image_val
 
-    query[index].image = image_val
+
 
     if (index == query.length - 1)
     {
-
+      
       if (query.length == 0) {
         return res.status(200).json({
           message: "Success",
