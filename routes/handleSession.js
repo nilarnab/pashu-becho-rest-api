@@ -5,10 +5,9 @@ const Users = require("../models/Users");
 
 // utility functions
 
-async function get_user(uuid, phone_num)
-{
+async function get_user(uuid, phone_num) {
 
-    var sessions = await Sessions.find({uuid: uuid, phonenum: phone_num})
+    var sessions = await Sessions.find({ uuid: uuid, phonenum: phone_num })
 
     var user_id = sessions[0].user_id
 
@@ -35,8 +34,7 @@ router.post('/create', async (req, res, next) => {
     */
 
 
-    if (req.query.phone_num && req.query.uuid)
-    {
+    if (req.query.phone_num && req.query.uuid) {
 
         // initialization
         var user_id = null
@@ -45,10 +43,9 @@ router.post('/create', async (req, res, next) => {
 
         // checking for an existing session
         // ----------------------------------------
-        var existings = await Sessions.find({phonenum: phone_num, uuid: uuid, alive: 1})
+        var existings = await Sessions.find({ phonenum: phone_num, uuid: uuid, alive: 1 })
 
-        if (existings.length != 0)
-        {
+        if (existings.length != 0) {
 
             var user = await get_user(uuid, phone_num)
 
@@ -60,8 +57,7 @@ router.post('/create', async (req, res, next) => {
                 }
             )
         }
-        else
-        {
+        else {
             console.log("session does not exist")
         }
 
@@ -72,24 +68,23 @@ router.post('/create', async (req, res, next) => {
         var timestamp = Date.now()
 
         const date = new Date(timestamp)
-        var month = date.getMonth()+1
+        var month = date.getMonth() + 1
 
-        const timestamp_human = date.getFullYear() + ':' 
-        + month + ':'
-        + date.getDate() + '::'
-        + date.getHours() + ':'
-        + date.getMinutes() + ':'
-        + date.getSeconds()+':'
-        + date.getMilliseconds()
+        const timestamp_human = date.getFullYear() + ':'
+            + month + ':'
+            + date.getDate() + '::'
+            + date.getHours() + ':'
+            + date.getMinutes() + ':'
+            + date.getSeconds() + ':'
+            + date.getMilliseconds()
 
         // ---------------------------------------------------
 
         // find if user already exists 
         // -------------------------------------------------
-        var existing = await Users.find({phone: phone_num})
+        var existing = await Users.find({ phone: phone_num })
 
-        if (existing.length == 0)
-        {
+        if (existing.length == 0) {
             // as the user does not already exist, we have to make a new user
             // ------------------------------------
             var users = await Users.insertMany([
@@ -102,20 +97,19 @@ router.post('/create', async (req, res, next) => {
 
 
             // -------------------------------
-            
+
         }
 
-        else
-        {
+        else {
             // if user already exists, just query the user id
             // -----------------------------------------
-            var users = await Users.find({phone: phone_num})
-            
+            var users = await Users.find({ phone: phone_num })
+
             user_id = users[0]._id.toString()
             // ----------------------------------------
 
         }
-        
+
         // now creating a new entry in the session
         // ------------------------------------
 
@@ -142,8 +136,7 @@ router.post('/create', async (req, res, next) => {
             }
         )
     }
-    else
-    {
+    else {
         res.json(
             {
                 verdict: 0,
@@ -157,16 +150,14 @@ router.post('/create', async (req, res, next) => {
 
 router.post('/is_alive', async (req, res, next) => {
 
-    if (req.query.user_id)
-    {
+    if (req.query.user_id) {
 
         var user_id = req.query.user_id
 
         // checking if exists in sessions
-        var alives = await Sessions.find({user_id: user_id, alive: true})
+        var alives = await Sessions.find({ user_id: user_id, alive: true })
 
-        if (alives.length == 0)
-        {
+        if (alives.length == 0) {
             res.json(
                 {
                     verdict: 0,
@@ -174,8 +165,7 @@ router.post('/is_alive', async (req, res, next) => {
                 }
             )
         }
-        else
-        {
+        else {
             var response = await Users.findById(user_id)
             res.json(
                 {
@@ -187,8 +177,7 @@ router.post('/is_alive', async (req, res, next) => {
         }
 
     }
-    else
-    {
+    else {
         res.json(
             {
                 verdict: 0,
@@ -201,24 +190,22 @@ router.post('/is_alive', async (req, res, next) => {
 router.post('/destroy', async (req, res, next) => {
 
     console.log("reached endpoint")
-    if (req.query.user_id)
-    {
+    if (req.query.user_id) {
 
-       var user_id = req.query.user_id
-       
-       var response = await Sessions.deleteMany({
-           user_id: user_id
-       })
+        var user_id = req.query.user_id
 
-       res.json({
-           verdict: 1,
-           message: "Deletion complete",
-           response
-       })
+        var response = await Sessions.deleteMany({
+            user_id: user_id
+        })
+
+        res.json({
+            verdict: 1,
+            message: "Deletion complete",
+            response
+        })
 
     }
-    else
-    {
+    else {
         res.json(
             {
                 verdict: 0,
