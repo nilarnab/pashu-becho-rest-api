@@ -36,7 +36,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /root/Desktop/webView
+            cd /root/Desktop/buyBold_RestApi
             git fetch origin master
             git reset --hard FETCH_HEAD
             git clean -d -f --exclude secrets
