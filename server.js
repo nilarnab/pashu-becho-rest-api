@@ -61,9 +61,10 @@ const sessionRouter = require("./routes/handleSession")
 const userInfoRouter = require("./routes/userInfo")
 const carouselRouter = require('./routes/carousel_img')
 const monitorRouter = require('./routes/monitor_test')
+const categoryDefine= require('./routes/categoryDefine')
 
 app.use("/carousel", carouselRouter)
-
+app.use("/categoryDefine", categoryDefine)
 app.use("/auth", authRouter)
 app.use('/stream', streamRouter)
 app.use("/phoneVerify", phoneVerfiyRouter)
