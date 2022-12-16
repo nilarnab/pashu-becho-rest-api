@@ -131,14 +131,9 @@ router.post('/purge', async (req, res, next) => {
 router.post('/add', async (req, res, next) => {
     
     /*
-
         requried fields
-
         body: product object that is to be added 
-
-
     */
-
     console.log(req.body)
    
     var prod_id = req.body._id.$oid
