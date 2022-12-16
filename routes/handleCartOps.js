@@ -36,7 +36,7 @@ router.post("/show_items", async (req, res, next) => {
 
             console.log("making items")
             var prod_obj = {}
-            prod_obj[cart_items[i]._id.toString()] = product
+            prod_obj["product"] = product
             prod_obj["qnt"] = cart_items[i]["qnt"]
             response["cart_items"].push(prod_obj)
         }
@@ -81,21 +81,20 @@ router.post("/insert", async (req, res, next) => {
     */
 
     if (req.query.user_id && req.query.prod_id && req.query.qnt) {
-        
+
         var user_id = req.query.user_id
         var prod_id = req.query.prod_id
         var qnt = req.query.qnt
 
-        var cart_ids = await Carts.find({user_id: user_id, prod_id: prod_id})
+        var cart_ids = await Carts.find({ user_id: user_id, prod_id: prod_id })
 
-        if (cart_ids.length > 0)
-        {
-            
+        if (cart_ids.length > 0) {
+
             var response = await Carts.findOneAndUpdate({
                 user_id: user_id,
                 prod_id: prod_id
-            }, { qnt: qnt})
-            
+            }, { qnt: qnt })
+
 
             return res.json({
                 verdict: 1,
@@ -138,8 +137,8 @@ router.post("/alter", async (req, res, next) => {
     changes the qnt value of a cart item
     
     */
-   console.log("received")
-   console.log(req.query)
+    console.log("received")
+    console.log(req.query)
 
     if (req.query.cart_id && req.query.qnt_new) {
 
