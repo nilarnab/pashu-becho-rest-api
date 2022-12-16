@@ -34,24 +34,30 @@ router.post("/show_items", async (req, res, next) => {
         for (i = 0; i < cart_items.length; i++) {
             var product = await Products.findById(cart_items[i]["prod_id"])
 
-            console.log("making items")
+            console.log(cart_items[i])
+            console.log(cart_items[i].qnt)
             var prod_obj = {}
             prod_obj["product"] = product
-            prod_obj["qnt"] = cart_items[i]["qnt"]
+            prod_obj["qnt"] = cart_items[i].qnt
             response["cart_items"].push(prod_obj)
+
+            if (i == cart_items.length - 1) {
+
+                console.log("sending response")
+                return res.json({
+                    verdict: 1,
+                    response
+                })
+
+
+            }
         }
 
         // cart_items.forEach(async (data, i) => {
         //     cart_items[i]["product"] = await Product.findById(req.query.user_id)
         // })
 
-        console.log("returning items")
-        return res.json(
-            {
-                verdict: 1,
-                response
-            }
-        )
+
 
 
     }
