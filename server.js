@@ -61,7 +61,8 @@ const sessionRouter = require("./routes/handleSession")
 const userInfoRouter = require("./routes/userInfo")
 const carouselRouter = require('./routes/carousel_img')
 const monitorRouter = require('./routes/monitor_test')
-const categoryDefine= require('./routes/categoryDefine')
+const categoryDefine = require('./routes/categoryDefine')
+const ordeRouter = require('./routes/order_manage')
 
 app.use("/carousel", carouselRouter)
 app.use("/categoryDefine", categoryDefine)
@@ -74,6 +75,7 @@ app.use("/search", searchRouter);
 app.use("/sessionManage", sessionRouter)
 app.use("/userInfo", userInfoRouter)
 app.use("/monitor", monitorRouter)
+app.use("/orderManage", ordeRouter)
 
 
 const port = process.env.PORT || 3000;
