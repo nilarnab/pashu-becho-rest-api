@@ -18,9 +18,10 @@ const { send } = require('process');
 
 router.post('/query', async (req, res, next) => {
 
+    console.log("got for query")
+    console.log(req.query)
 
-    if (req.query.query == '')
-    {
+    if (req.query.query == '') {
         return res.json(
             {
                 'verdict': 1,
@@ -31,7 +32,7 @@ router.post('/query', async (req, res, next) => {
 
 
     var sendable = []
-    
+
     var query = req.query.query
     console.log(query)
     var response = await axios(
@@ -45,8 +46,8 @@ router.post('/query', async (req, res, next) => {
             Headers: {
                 'Content-Type': 'application/json'
             }
-        
-    })
+
+        })
 
     // response = JSON.stringify(response)
 
@@ -54,7 +55,7 @@ router.post('/query', async (req, res, next) => {
 
     var count = 0;
 
-    response.data.hits.hits.forEach( async (pred, index) => {
+    response.data.hits.hits.forEach(async (pred, index) => {
 
 
         // console.log(pred)
@@ -62,7 +63,7 @@ router.post('/query', async (req, res, next) => {
         var pred_id = pred._id
         console.log(pred_id)
 
-        var prediction = await Searchables.find({search_id: pred_id})
+        var prediction = await Searchables.find({ search_id: pred_id })
         console.log(prediction[0].prod_id)
         var prod = await Products.findById(prediction[0].prod_id)
 
@@ -73,10 +74,9 @@ router.post('/query', async (req, res, next) => {
         sendable.push(prod)
 
 
-        if (sendable.length == response.data.hits.hits.length)
-        {
+        if (sendable.length == response.data.hits.hits.length) {
             console.log(sendable)
-        
+
             return res.json(
                 {
                     'verdict': 1,
@@ -85,11 +85,11 @@ router.post('/query', async (req, res, next) => {
             )
         }
 
-        
+
     });
 
 
-    
+
 })
 
 
@@ -101,7 +101,7 @@ router.post('/purge', async (req, res, next) => {
     searchables.forEach(async (searchable, index) => {
         console.log(searchable.search_id)
 
-        try{
+        try {
             var response = await axios(
                 {
                     method: 'delete',
@@ -113,32 +113,32 @@ router.post('/purge', async (req, res, next) => {
                     Headers: {
                         'Content-Type': 'application/json'
                     }
-                
-            })
+
+                })
 
         }
-        catch( error ) {
+        catch (error) {
             console.log("could not find")
         }
 
         // console.log(response)
-        
+
     })
 
-    
+
 })
 
 router.post('/add', async (req, res, next) => {
-    
+
     /*
         requried fields
         body: product object that is to be added 
     */
     console.log(req.body)
-   
+
     var prod_id = req.body._id.$oid
     var timestamp = Date.now()
-    
+
     // req.body._id = prod_id
 
     delete req.body._id
@@ -157,8 +157,8 @@ router.post('/add', async (req, res, next) => {
             Headers: {
                 'Content-Type': 'application/json'
             }
-        
-    })
+
+        })
 
     console.log("success in insertion in open search")
 
@@ -168,14 +168,13 @@ router.post('/add', async (req, res, next) => {
         [{
             prod_id: prod_id,
             search_id: timestamp
-        }], (err, res) => 
-        {
-            console.log(err)
-            console.log(res)
-        }
+        }], (err, res) => {
+        console.log(err)
+        console.log(res)
+    }
     )
     console.log("inserted in local database")
-    
+
     return res.json(
         {
             verdict: 1
