@@ -29,6 +29,15 @@ router.post("/show_items", async (req, res, next) => {
     if (req.query.user_id) {
         console.log("user id present")
         var cart_items = await Carts.find({ user_id: req.query.user_id, valid: 1 })
+
+        if (cart_items.length == 0) {
+            return res.json({
+                verdict: 1,
+                message: "No items in cart",
+                response: null
+            })
+        }
+
         console.log("foudn some items")
         response["cart_items"] = []
         for (i = 0; i < cart_items.length; i++) {
