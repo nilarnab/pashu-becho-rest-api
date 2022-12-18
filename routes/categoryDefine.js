@@ -17,6 +17,7 @@ router.get('/getCategories', async (req, res, next) => {
   if(type==0){
   try{
     const categories=await Categories.find({type:0});
+    console.log(categories);
     res.send(categories);
 }
 catch(err){
@@ -25,7 +26,10 @@ catch(err){
 }}
 else if(type==1){
   try{
+
     const categories=await Categories.find({type:1});
+    console.log(categories);
+
     res.send(categories);
 }
 catch(err){
