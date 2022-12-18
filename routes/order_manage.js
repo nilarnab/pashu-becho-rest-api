@@ -162,7 +162,7 @@ router.post('/get_orders', async (req, res, next) => {
 
             order_items_sendable.push(order_item_temp)
 
-            if (j == order_items.length - 1) {
+            if (order_items_sendable.length == order_items.length) {
                 order["items"] = order_items_sendable
                 // console.log("pushing order", i)
                 // console.log(order)
