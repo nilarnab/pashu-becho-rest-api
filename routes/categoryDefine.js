@@ -14,16 +14,16 @@ require('dotenv').config();
 router.get('/getCategories', async (req, res, next) => {
   let type=req.query.type;
   console.log("type : ",type);
-  if(!type||type===0){
+  if(type==0){
   try{
-    const categories=await Categories.find({});
+    const categories=await Categories.find({type:0});
     res.send(categories);
 }
 catch(err){
     console.log(err);
     res.sendStatus(500);
 }}
-else if(type===1){
+else if(type==1){
   try{
     const categories=await Categories.find({type:1});
     res.send(categories);
