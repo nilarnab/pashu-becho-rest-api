@@ -12,6 +12,9 @@ require('dotenv').config();
 // for streaming service
 
 router.get('/getCategories', async (req, res, next) => {
+  let type=req.query.type;
+
+  if(!type||type===0){
   try{
     const categories=await Categories.find({});
     res.send(categories);
@@ -19,9 +22,18 @@ router.get('/getCategories', async (req, res, next) => {
 catch(err){
     console.log(err);
     res.sendStatus(500);
+}}
+else if(type===1){
+  try{
+    const categories=await Categories.find({type:1});
+    res.send(categories);
 }
-
-})
+catch(err){
+    console.log(err);
+    res.sendStatus(500);
+}}
+}
+)
 
 
 module.exports = router
