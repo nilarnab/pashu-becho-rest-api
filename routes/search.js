@@ -18,6 +18,8 @@ const Product = require('../models/Product');
 var client;
 try {
  client = new MeiliSearch({ host: 'http://localhost:7700',apiKey: 'aajmereyaarkishaadihai' })
+ client.index('products').addDocuments({})
+ .then((res) => console.log(res));
 }
 catch(err){
     console.log(err);
