@@ -60,5 +60,15 @@ router.route
       }
     });
       
+router.get("/getCarousels",async(req,res)=>{
+  try{    
+    const data=await Carousels.find({});
+    res.send(data);
+  }
+  catch(err){
+    console.log(err);
+    res.sendStatus(500);
+  }
+})
 
       module.exports=router;
