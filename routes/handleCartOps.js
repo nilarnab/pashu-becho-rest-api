@@ -16,9 +16,7 @@ require('dotenv').config();
 router.post("/show_items", async (req, res, next) => {
     /*
     Accepts parameters
-
     1. user_id: (str)
-
     show all the cart items of a user id
     
     */
@@ -48,6 +46,7 @@ router.post("/show_items", async (req, res, next) => {
             var prod_obj = {}
             prod_obj["product"] = product
             prod_obj["qnt"] = cart_items[i].qnt
+            prod_obj["cart_id"] = cart_items[i]._id
             response["cart_items"].push(prod_obj)
 
             if (i == cart_items.length - 1) {
@@ -82,6 +81,57 @@ router.post("/show_items", async (req, res, next) => {
 
 })
 
+router.post("/show_item", async (req, res, next) => {
+    /*
+    Accepts parameters
+
+    1. user_id: (str)
+    2. prod_id: (str) 
+
+    show all the cart items of a user id
+    
+    */
+
+    var user_id = req.query.user_id
+    var prod_id = req.query.prod_id
+
+    if (user_id && prod_id) {
+        var cart_ids = await Carts.find({ user_id: user_id, prod_id: prod_id, valid: 1 })
+
+        if (cart_ids.length == 0) {
+            return res.json({
+                verdict: 0,
+                message: "No such cart item exists",
+                cart_item: null
+            })
+        }
+        var cart_item = cart_ids[0]
+
+        // finding product
+        var prod_id = cart_item.prod_id
+        var prod = await Products.findById(prod_id)
+        cart_item.product = prod
+
+        return res.json({
+            verdict: 1,
+            message: "Success in fetching",
+            cart_item,
+        })
+    }
+
+
+    else {
+        return res.json({
+            verdict: 0,
+            message: "Invalid fields",
+            data: null
+        })
+    }
+
+
+
+})
+
 router.post("/insert", async (req, res, next) => {
 
     /*
@@ -101,7 +151,7 @@ router.post("/insert", async (req, res, next) => {
         var prod_id = req.query.prod_id
         var qnt = req.query.qnt
 
-        var cart_ids = await Carts.find({ user_id: user_id, prod_id: prod_id })
+        var cart_ids = await Carts.find({ user_id: user_id, prod_id: prod_id, valid: 1 })
 
         if (cart_ids.length > 0) {
 
@@ -114,6 +164,7 @@ router.post("/insert", async (req, res, next) => {
             return res.json({
                 verdict: 1,
                 message: "Success in changing",
+                response,
             })
 
 
@@ -152,13 +203,12 @@ router.post("/alter", async (req, res, next) => {
     changes the qnt value of a cart item
     
     */
-    console.log("received")
-    console.log(req.query)
 
     if (req.query.cart_id && req.query.qnt_new) {
 
-        var cart_ids = await Carts.find({ _id: req.query.cart_id })
-        console.log(cart_ids);
+        console.log(req.query)
+        var cart_ids = await Carts.find({ _id: req.query.cart_id, valid: 1 })
+
         try {
             if (cart_ids.length == 0) {
                 return res.send({
@@ -171,7 +221,7 @@ router.post("/alter", async (req, res, next) => {
         catch (err) {
             console.log(err);
         }
-        console.log("updating")
+
         var response = await Carts.findByIdAndUpdate(req.query.cart_id, { qnt: req.query.qnt_new })
 
         return res.json({

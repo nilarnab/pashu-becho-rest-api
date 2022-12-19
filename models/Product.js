@@ -18,7 +18,7 @@ const productSchema = new mongoose.Schema({
     type: Number,
   },
   quantity: Number,
-  image: {type:String,default:"https://picsum.photos/200/300"},
+  image: { type: String, default: "https://picsum.photos/200/300" },
   priceDiscount: {
     type: Number,
     validate: {
