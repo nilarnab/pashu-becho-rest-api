@@ -17,7 +17,8 @@ categoriesSchema = new Schema( {
 		title:String,
 		action:String,
 		image:String
-	}]
+	}],
+	type:{type:Number,default:0} // 1 for scrollable category
 	
 }),
 Categories = mongoose.model('Categories', categoriesSchema);
