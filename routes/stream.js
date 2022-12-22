@@ -38,14 +38,14 @@ router.get('/getResources',async (req,res)=>{
     }
 })
 
-router.get("/addImage",async(req,res)=>{
+router.get("/addVideo",async(req,res)=>{
     try{
-    await (new Resource({productID: "6346cb0d7b054c3bf2d50cd6", type :"image"})).save();
-    res.send(200)
+    await (new Resource({productID: "6346cb0d7b054c3bf2d50cd6", type :"video"})).save();
+    res.sendStatus(200)
 }
     catch(err){
         console.log(err)
-        res.send(500);
+        res.sendStatus(500);
     }
 })
 
