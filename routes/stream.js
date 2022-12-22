@@ -28,6 +28,8 @@ router.get('/getResources',async (req,res)=>{
     }
     try{
         const resources=await Resource.find({productID:id});
+
+        console.log("sending resources : - ",id,resources);
         res.send(resources);
     }
     catch(err){
