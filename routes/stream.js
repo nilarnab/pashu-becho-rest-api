@@ -27,7 +27,7 @@ router.get('/getResources',async (req,res)=>{
         return res.sendStatus(403);
     }
     try{
-        const resources=await Resource.find({productID:pid});
+        const resources=await Resource.find({productID:id});
         res.send(resources);
     }
     catch(err){
