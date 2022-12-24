@@ -224,7 +224,7 @@ router.post("/alter", async (req, res, next) => {
 
         try{
             //check if new quantity becomes 0
-            if(req.query.qnt_new===0){
+            if(req.query.qnt_new==0){
                 console.log("removing item from cart")
             var response = await Carts.findByIdAndUpdate(req.query.cart_id,{$set:{qnt:0,valid:0}});
             }
