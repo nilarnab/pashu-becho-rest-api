@@ -203,10 +203,10 @@ router.post("/alter", async (req, res, next) => {
     changes the qnt value of a cart item
     
     */
-
+    console.log("request to alter quantity ",req.query);
     if (req.query.cart_id && req.query.qnt_new!==undefined) {
 
-        console.log(req.query)
+        console.log(req.query," all fine")
         var cart_ids = await Carts.find({ _id: req.query.cart_id, valid: 1 })
 
         try {
@@ -229,7 +229,8 @@ router.post("/alter", async (req, res, next) => {
             var response = await Carts.findByIdAndUpdate(req.query.cart_id,{$set:{qnt:0,valid:0}});
             }
             else{
-            response = await Carts.findByIdAndUpdate(req.query.cart_id, { qnt: req.query.qnt_new });
+                console.log("changing quantity to ",req.query.qnt_new);
+                response = await Carts.findByIdAndUpdate(req.query.cart_id, { qnt: req.query.qnt_new });
             }
             return res.json({
                 verdict: 1,
