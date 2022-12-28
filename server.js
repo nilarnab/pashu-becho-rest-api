@@ -54,6 +54,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const authRouter = require('./routes/auth.js');
 const streamRouter = require('./routes/stream.js');
 const phoneVerfiyRouter = require('./routes/phoneVerify');
+const PushNotification =require('./routes/push_notification')
 const handleCartOps = require('./routes/handleCartOps');
 const productRouter = require("./routes/products.js");
 const searchRouter = require("./routes/search.js");
@@ -63,14 +64,20 @@ const carouselRouter = require('./routes/carousel_img')
 const monitorRouter = require('./routes/monitor_test')
 const categoryDefine = require('./routes/categoryDefine')
 const ordeRouter = require('./routes/order_manage')
+const payment = require('./routes/payment_handler');
+const wishlist_handle = require('./routes/wishlist_handler')
+
 
 app.use("/carousel", carouselRouter)
 app.use("/categoryDefine", categoryDefine)
 app.use("/auth", authRouter)
+app.use("/pushnot",PushNotification)
 app.use('/stream', streamRouter)
 app.use("/phoneVerify", phoneVerfiyRouter)
 app.use("/handleCartOps", handleCartOps)
 app.use("/products", productRouter);
+app.use("/razorpay", payment);
+app.use("/wishlist",wishlist_handle);
 app.use("/search", searchRouter);
 app.use("/sessionManage", sessionRouter)
 app.use("/userInfo", userInfoRouter)
