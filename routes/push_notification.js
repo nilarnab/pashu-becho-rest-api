@@ -3,7 +3,7 @@ const express = require('express')
 const router =express.Router();
 const app = express();
 
-var serviceAccount = require("PATH TO FIREBASE ADMIB SDK JSON");
+var serviceAccount = require("../buybold-2efd2-firebase-adminsdk-jjzls-c39a18ccd8.json");
 app.use(express.json())
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
