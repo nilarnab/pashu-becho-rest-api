@@ -15,20 +15,20 @@ const { send } = require('process');
 
 const { MeiliSearch } = require('meilisearch');
 const Product = require('../models/Product');
-// var client;
-// try {
-//  client = new MeiliSearch({ host: 'http://localhost:7700',apiKey: 'aajmereyaarkishaadihai' })
-//  client.index('products').addDocuments({})
-//  .then((res) => console.log(res));
-// }
-// catch(err){
-//     console.log(err);
-// }
+var client;
+try {
+ client = new MeiliSearch({ host: 'http://localhost:7700',apiKey: 'aajmereyaarkishaadihai' })
+ client.index('products').addDocuments({})
+ .then((res) => console.log(res));
+}
+catch(err){
+    console.log(err);
+}
 
 router.get("/query",async(req,res)=>{
     const q=req.query.query;
     try{
-    // client.index('products').search(q).then((result) => res.send({'verdict': 1,'data': result.hits,}));
+    client.index('products').search(q).then((result) => res.send({'verdict': 1,'data': result.hits,}));
     return res.json(
         []
     )
