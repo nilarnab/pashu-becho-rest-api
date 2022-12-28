@@ -222,31 +222,13 @@ router.post("/alter", async (req, res, next) => {
             console.log(err);
         }
 
-        try{
-            //check if new quantity becomes 0
-            if(req.query.qnt_new==0){
-                console.log("removing item from cart")
-            var response = await Carts.findByIdAndUpdate(req.query.cart_id,{$set:{qnt:0,valid:0}});
-            }
-            else{
-                console.log("changing quantity to ",req.query.qnt_new);
-                response = await Carts.findByIdAndUpdate(req.query.cart_id, { qnt: req.query.qnt_new });
-            }
-            return res.json({
-                verdict: 1,
-                message: "Success in changing quantity",
-                data: response
-            })
-        }
-        catch(err){
-            console.log(err);
-            return res.json({
-                verdict: 0,
-                message: "error in changing quantity",
-                data: null
-            })
-            
-        }
+        var response = await Carts.findByIdAndUpdate(req.query.cart_id, { qnt: req.query.qnt_new })
+
+        return res.json({
+            verdict: 1,
+            message: "Success in changing quantity",
+            data: response
+        })
     }
     else {
         return res.json({
