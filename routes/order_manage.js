@@ -18,7 +18,7 @@ require('dotenv').config();
 // titles and descriptinos of stages
 stage_titles = [
     'Order Placed',
-    'Manul Verification',
+    'Manual Verification',
     'Out for Delivery',
     'Order Delivered'
 ]
