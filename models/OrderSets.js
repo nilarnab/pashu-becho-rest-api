@@ -22,6 +22,12 @@ const orderSetSchema = new mongo.Schema({
     stage: {
         type: Number,
         default: 0
+    },
+    cancel_code: {
+        type: Number,
+    },
+    cancel_reason: {
+        type: String,
     }
 })
 
