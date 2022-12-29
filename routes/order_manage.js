@@ -98,9 +98,9 @@ router.post("/place_by_cart", async (req, res, next) => {
 //Comparer Function    
 function GetSortOrder(prop) {
     return function (a, b) {
-        if (a[prop] > b[prop]) {
+        if (a[prop] < b[prop]) {
             return 1;
-        } else if (a[prop] < b[prop]) {
+        } else if (a[prop] > b[prop]) {
             return -1;
         }
         return 0;
@@ -183,4 +183,94 @@ router.post('/get_orders', async (req, res, next) => {
 
     })
 })
+
+
+router.post('/get_old_orders', async (req, res, next) => {
+
+    /*
+    Returns all the order sets of a user
+    
+    Accepts parameters
+    user_id: (str)
+    */
+
+    // console.log("entered route here")
+
+    //initialization
+    var user_id = req.query.user_id
+    var response = []
+
+    // get all the order sets
+    var order_sets = await OrderSets.find({ user_id: user_id, valid: 0 }).sort({ timestamp: 1 })
+
+
+    if (order_sets.length == 0) {
+        return res.json({
+            verdict: 1,
+            message: "No old orders",
+            response: []
+        })
+    }
+
+    // get the items of the order sets
+    order_sets.forEach(async (data, i) => {
+        // console.log("entered loop", i)
+        var order = {}
+        var order_id = data.order_id
+
+        // get stage data
+        order["order_id"] = order_id
+        order["stage"] = data.stage
+        order["cancel_code"] = data.cancel_code
+        order["cancel_reason"] = data.cancel_reason
+        order["order_date"] = data.timestamp
+        order["stage_title"] = stage_titles[data.stage]
+        order["stage_description"] = stage_descriptions[data.stage]
+
+        // get order items
+        var order_items = await Orders.find({ order_id: order_id, valid: 1 })
+
+        var order_items_sendable = []
+        var send_response = false
+
+
+        order_items.forEach(async (data2, j) => {
+
+            var order_item_temp = {}
+            order_item_temp["prod_id"] = data2.prod_id
+            order_item_temp["qnt"] = data2.qnt
+            order_item_temp["user_id"] = data2.user_id
+            order_item_temp["order_id"] = data2.order_id
+            order_item_temp["valid"] = data2.valid
+
+            order_item_temp["product"] = await Products.findById(order_items[j]["prod_id"])
+
+            order_items_sendable.push(order_item_temp)
+
+            if (order_items_sendable.length == order_items.length) {
+
+                order["items"] = order_items_sendable
+                // console.log("pushing order", i)
+                // console.log(order)
+                response.push(order)
+                if (response.length == order_sets.length) {
+
+                    // sorting array
+                    response.sort(GetSortOrder("order_date"))
+
+                    console.log(response)
+
+                    return res.json({
+                        verdict: 1,
+                        response
+                    })
+                }
+            }
+        })
+
+
+    })
+})
+
+
 module.exports = router
