@@ -31,6 +31,40 @@ stage_descriptions = [
 ]
 
 
+router.post("/cancel_order", async (req, res, next) => {
+
+    /*
+    Accepts parameters
+    order_id: (str)
+    reason_prime: (str)
+    reason_secondary: (str)
+    */
+
+    var order_id = req.query.order_id
+    var reason_prime = req.query.reason_prime
+    var reason_secondary = req.query.reason_secondary
+
+    console.log(order_id, reason_prime, reason_secondary)
+
+    if (order_id != null && reason_prime != null && reason_secondary != null) {
+        var response = await OrderSets.updateOne({ order_id: order_id }, { valid: 0, 'cancel_code': 0, 'cancel_reason': reason_prime + '\n' + reason_secondary })
+        console.log("Cancellation complete")
+        return res.json({
+            verdict: 1,
+            message: "Order cancelled",
+            response
+        })
+
+    }
+    else {
+        return res.json({
+            verdict: 0,
+            message: "Invalid parameters"
+        })
+    }
+})
+
+
 router.post("/place_by_cart", async (req, res, next) => {
     /*
     Accepts parameters
@@ -127,6 +161,14 @@ router.post('/get_orders', async (req, res, next) => {
     var order_sets = await OrderSets.find({ user_id: user_id, valid: 1 }).sort({ timestamp: 1 })
 
     // // console.log(order_sets)
+
+    if (order_sets.length == 0) {
+        return res.json({
+            verdict: 1,
+            message: "No orders",
+            response: []
+        })
+    }
 
     // get the items of the order sets
     order_sets.forEach(async (data, i) => {
