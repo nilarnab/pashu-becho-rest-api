@@ -55,10 +55,10 @@ router.post('/add', async (req, res, next) => {
     console.log(req.body)
 
     try{
-    // //     client.index('products').addDocuments(req.body)
-    // //     .then((res) => console.log(res));
-    // //    console.log("success in insertion in open search")
-    //    console.log(prod_id);
+        client.index('products').addDocuments(req.body)
+        .then((res) => console.log(res));
+       console.log("success in insertion in open search")
+       console.log(prod_id);
 
        Searchables.insertMany(
            [{

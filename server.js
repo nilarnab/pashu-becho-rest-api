@@ -63,7 +63,10 @@ const carouselRouter = require('./routes/carousel_img')
 const monitorRouter = require('./routes/monitor_test')
 const categoryDefine = require('./routes/categoryDefine')
 const ordeRouter = require('./routes/order_manage')
+const activityRouter = require('./routes/activity')
 
+
+app.use("/activity",activityRouter)
 app.use("/carousel", carouselRouter)
 app.use("/categoryDefine", categoryDefine)
 app.use("/auth", authRouter)
