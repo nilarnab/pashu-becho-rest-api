@@ -69,6 +69,12 @@ router.post("/place_by_cart", async (req, res, next) => {
     /*
     Accepts parameters
     user_id: (str)
+    lat: (float)
+    long: (float)
+    loc1: (str)
+    loc2: (str)
+    pin: (str)
+    city: (str)
 
     place order by cart items, and makes the entries of the cart invalid
 
@@ -77,6 +83,22 @@ router.post("/place_by_cart", async (req, res, next) => {
 
     // initialization
     var user_id = req.query.user_id
+    var lat = req.query.lat
+    var long = req.query.long
+    var loc1 = req.query.loc1
+    var loc2 = req.query.loc2
+    var pin = req.query.pin
+    var city = req.query.city
+
+    console.log(user_id, lat, long, loc1, loc2, pin, city)
+
+
+    if (user_id == null || lat == null || long == null || loc1 == null || loc2 == null || pin == null || city == null) {
+        return res.json({
+            verdict: 0,
+            message: "Missing parameters"
+        })
+    }
 
     // get all the valid cart items
     var cart_items = await Carts.find({ user_id: user_id, valid: 1 })
@@ -92,7 +114,19 @@ router.post("/place_by_cart", async (req, res, next) => {
     // adding cart items to order
     var order_id = uuidv4()
     // make a new order Set
-    var response = await OrderSets.insertMany({ order_id: order_id, user_id: user_id, timestamp: Date.now() })
+    var response = await OrderSets.insertMany({
+        order_id: order_id,
+        user_id: user_id,
+        timestamp: Date.now(),
+        location: {
+            type: 'Point',
+            coordinates: [long, lat]
+        },
+        loc1: loc1,
+        loc2: loc2,
+        pin: pin,
+        city: city,
+    })
 
     // update the cart items with order_id
     var cart_items_sendable = []
