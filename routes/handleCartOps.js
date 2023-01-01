@@ -8,6 +8,7 @@ const Users = require('../models/Users')
 const Otps = require('../models/Otps')
 const Carts = require('../models/Carts')
 const Products = require('../models/Product')
+const Activity =require("../models/Activity")
 var path = require('path');
 const { randomFillSync } = require('crypto');
 require('dotenv').config();
@@ -176,7 +177,13 @@ router.post("/insert", async (req, res, next) => {
         new_cart.qnt = req.query.qnt
 
         var response = await new_cart.save()
-
+        try{
+            await (new Activity({action:"addedToCart",productID:prod_id,timestamp:Date.now(),userID:user_id})).save();
+        }
+        catch(err){
+            console.log(err);
+            res.sendStatus(500);
+        }
         return res.json({
             verdict: 1,
             message: "Success in insertion",

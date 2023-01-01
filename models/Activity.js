@@ -2,7 +2,7 @@ const { Int32 } = require('mongodb')
 const { default: mongoose } = require('mongoose')
 const mongo = require('mongoose')
 
-const monitorPageEngagementSchema = new mongo.Schema({
+const ActivitySchema = new mongo.Schema({
     userID: {
         type: String,
         required: true,
@@ -13,7 +13,7 @@ const monitorPageEngagementSchema = new mongo.Schema({
     //         return this.userid + '_' + this.pagename
     //     }
     // },
-    sessionID:{type:String},
+    // sessionID:{type:String},
     timestamp: {
         type: Date,
     },
@@ -22,6 +22,6 @@ const monitorPageEngagementSchema = new mongo.Schema({
     productID:{type:String}
 })
 
-module.exports = mongoose.model('monitorPageEngagement', monitorPageEngagementSchema)
+module.exports = mongoose.model('Activity', ActivitySchema)
 
 
