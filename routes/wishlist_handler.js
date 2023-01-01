@@ -30,13 +30,13 @@ router.post("/show_items", async (req, res, next) => {
             })
         }
 
-        console.log("foudn some items")
+        console.log("found some items")
         response["wishlist_items"] = []
         for (i = 0; i < wishlist_items.length; i++) {
             var product = await Products.findById(wishlist_items[i]["prod_id"])
 
             console.log(wishlist_items[i])
-            console.log(wishlist_items[i].qnt)
+            
             var prod_obj = {}
             prod_obj["product"] = product
             prod_obj["wishlist_id"] = wishlist_items[i]._id
@@ -169,7 +169,13 @@ router.post("/insert", async (req, res, next) => {
         
 
         var response = await new_wishlist.save()
-
+        try{
+            await (new Activity({action:"addedToWishlist",productID:prod_id,timestamp:Date.now(),userID:user_id})).save();
+        }
+        catch(err){
+            console.log(err);
+            res.sendStatus(500);
+        }
         return res.json({
             verdict: 1,
             message: "Success in insertion",
