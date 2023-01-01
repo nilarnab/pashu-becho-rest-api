@@ -28,7 +28,31 @@ const orderSetSchema = new mongo.Schema({
     },
     cancel_reason: {
         type: String,
-    }
+    },
+    location: {
+        type: {
+            type: String,
+            default: 'Point',
+        },
+        coordinates: [Number]
+    },
+    loc1: {
+        type: String,
+        required: true
+    },
+    loc2: {
+        type: String,
+        required: true
+    },
+    pin: {
+        type: String,
+        required: true
+    },
+    city: {
+        type: String,
+        required: true
+    },
+
 })
 
 module.exports = mongoose.model('OrderSets', orderSetSchema)

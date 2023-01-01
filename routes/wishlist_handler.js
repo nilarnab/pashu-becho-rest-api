@@ -220,15 +220,15 @@ router.post("/purge", async (req, res, next) => {
 })
 
 router.post("/remove",async (req, res, next) => {
-    const WishId = req.params.WishId;
+    const wishlist_id = req.params.wishlist_id;
     try {
-        const Wishlists = await Wishlists.findById(WishId);
+        const Wishlists = await Wishlists.findById(wishlist_id);
         if (!Wishlists) {
             return res.status(404).json({ message: 'Wishlists not found!' });
         }
 
         
-        await Wishlists.findByIdAndRemove(WishId);
+        await Wishlists.findByIdAndRemove(wishlist_id);
         res.status(200).json({ 'message': 'Deletion completed successfully!' });
 
     } catch (error) {

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Activity="../models/Activity";
+const Activity = "../models/Activity";
 
 app.get("/addActivity/:userID",async(req,res)=>{
     let userID=req.param.userID;
@@ -15,7 +15,7 @@ app.get("/addActivity/:userID",async(req,res)=>{
         try{
             await (new Activity({action:action,productID:pid,timestamp:Date.now(),userID:userID})).save();
         }
-        catch(err){
+        catch (err) {
             console.log(err);
             res.sendStatus(500);
         }
