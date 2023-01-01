@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Activity = "../models/Activity";
 
-app.get("/addActivity/:userID",async(req,res)=>{
+router.get("/addActivity/:userID",async(req,res)=>{
     let userID=req.param.userID;
     let action=req.query.action;
     let pid=req.query.pid;
