@@ -13,7 +13,7 @@ const monitorPageEngagementSchema = new mongo.Schema({
     //         return this.userid + '_' + this.pagename
     //     }
     // },
-    sessionID:{type:String},
+    // sessionID:{type:String},
     timestamp: {
         type: Date,
     },

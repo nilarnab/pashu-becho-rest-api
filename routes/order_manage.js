@@ -71,6 +71,12 @@ router.post("/place_by_cart", async (req, res, next) => {
         temp_item["user_id"] = data.user_id
         temp_item["prod_id"] = data.prod_id
         temp_item["qnt"] = data.qnt
+        try{
+            await (new Activity({action:"ordered",productID:data.prod_id,timestamp:Date.now(),userID:data.user_id})).save();
+        }
+        catch(err){
+            console.log(err);
+        }
 
         cart_items_sendable.push(temp_item)
 
@@ -81,7 +87,7 @@ router.post("/place_by_cart", async (req, res, next) => {
 
             // invalidating cart items
             var response = await Carts.updateMany({ user_id: user_id, valid: 1 }, { valid: 0 })
-
+            
             return res.json({
                 verdict: 1,
                 response
