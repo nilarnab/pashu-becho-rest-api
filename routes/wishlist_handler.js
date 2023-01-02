@@ -8,7 +8,7 @@ const Activity =require("../models/Activity")
 require('dotenv').config();
 
 
-router.post("/show_items", async (req, res, next) => {
+router.post("/showitems", async (req, res, next) => {
 
     var response = {}
     console.log("entered route")
@@ -69,7 +69,7 @@ router.post("/show_items", async (req, res, next) => {
 
 })
 
-router.post("/show_item", async (req, res, next) => {
+router.post("/showitem", async (req, res, next) => {
     /*
     Accepts parameters
 
@@ -120,7 +120,7 @@ router.post("/show_item", async (req, res, next) => {
 
 })
 
-router.post("/insert", async (req, res, next) => {
+router.post("/insert_item", async (req, res, next) => {
 
 //     /*
 //     Accepts parameters
