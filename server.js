@@ -79,13 +79,14 @@ app.use('/stream', streamRouter)
 app.use("/phoneVerify", phoneVerfiyRouter)
 app.use("/handleCartOps", handleCartOps)
 app.use("/products", productRouter);
-app.use("/razorpay", payment);
+
 app.use("/wishlist",wishlist_handle);
 app.use("/search", searchRouter);
 app.use("/sessionManage", sessionRouter)
 app.use("/userInfo", userInfoRouter)
 app.use("/monitor", monitorRouter)
 app.use("/orderManage", ordeRouter)
+app.use("/razorpay", payment);
 
 
 const port = process.env.PORT || 3000;
