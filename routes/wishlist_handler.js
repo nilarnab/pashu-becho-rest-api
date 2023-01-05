@@ -122,17 +122,17 @@ router.post("/showitem", async (req, res, next) => {
 
 router.post("/insert_item", async (req, res, next) => {
 
-//     /*
-//     Accepts parameters
+    /*
+    Accepts parameters
 
-//     1. user_id: (str)
-//     2. prod_id: (str)
+    1. user_id: (str)
+    2. prod_id: (str)
 
 
-//     inserts a new entry in the Wishlists for a user
+    inserts a new entry in the Wishlists for a user
 
-//     */
-
+    */
+ console.log("insert item me");
     if (req.query.user_id && req.query.prod_id ) {
 
         var user_id = req.query.user_id
@@ -190,7 +190,7 @@ router.post("/insert_item", async (req, res, next) => {
 
 
 
-router.delete("/remove",async (req, res, next) => {
+router.delete("/remove/:wishlist_id",async (req, res, next) => {
     const wishlist_id = req.params.wishlist_id;
     try {
         const Wishlist = await Wishlists.findById(wishlist_id);
