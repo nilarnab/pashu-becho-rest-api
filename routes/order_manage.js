@@ -45,11 +45,11 @@ router.post("/cancel_order", async (req, res, next) => {
     var reason_prime = req.query.reason_prime
     var reason_secondary = req.query.reason_secondary
 
-    console.log(order_id, reason_prime, reason_secondary)
+    // console.log(order_id, reason_prime, reason_secondary)
 
     if (order_id != null && reason_prime != null && reason_secondary != null) {
         var response = await OrderSets.updateOne({ order_id: order_id }, { valid: 0, 'cancel_code': 0, 'cancel_reason': reason_prime + '\n' + reason_secondary })
-        console.log("Cancellation complete")
+        // console.log("Cancellation complete")
         return res.json({
             verdict: 1,
             message: "Order cancelled",
@@ -80,7 +80,8 @@ router.post("/place_by_cart", async (req, res, next) => {
     place order by cart items, and makes the entries of the cart invalid
 
     */
-    // console.log("placing order by cart")
+
+    console.log("place by cart")
 
     // initialization
     var user_id = req.query.user_id
@@ -91,7 +92,7 @@ router.post("/place_by_cart", async (req, res, next) => {
     var pin = req.query.pin
     var city = req.query.city
 
-    console.log(user_id, lat, long, loc1, loc2, pin, city)
+    // console.log(user_id, lat, long, loc1, loc2, pin, city)
 
 
     if (user_id == null || lat == null || long == null || loc1 == null || loc2 == null || pin == null || city == null) {
@@ -149,9 +150,9 @@ router.post("/place_by_cart", async (req, res, next) => {
 
         cart_items_sendable.push(temp_item)
 
-        if (i == cart_items.length - 1) {
-            // console.log("updating cart items", order_id)
-            // console.log(cart_items_sendable)
+        if (cart_items_sendable.length == cart_items.length) {
+            // // console.log("updating cart items", order_id)
+            // // console.log(cart_items_sendable)
             var response = await Orders.insertMany(cart_items_sendable)
 
             // invalidating cart items
@@ -186,6 +187,7 @@ router.post("/place_by_item", async (req, res, next) => {
 
     */
     console.log("placing order by item")
+    console.log(req.query)
 
     // initialization
     var user_id = req.query.user_id
@@ -275,7 +277,7 @@ router.post('/get_orders', async (req, res, next) => {
     user_id: (str)
     */
 
-    // console.log("entered route here")
+    // // console.log("entered route here")
 
     //initialization
     var user_id = req.query.user_id
@@ -283,8 +285,6 @@ router.post('/get_orders', async (req, res, next) => {
 
     // get all the order sets
     var order_sets = await OrderSets.find({ user_id: user_id, valid: 1 }).sort({ timestamp: 1 })
-
-    // // console.log(order_sets)
 
     if (order_sets.length == 0) {
         return res.json({
@@ -296,7 +296,7 @@ router.post('/get_orders', async (req, res, next) => {
 
     // get the items of the order sets
     order_sets.forEach(async (data, i) => {
-        // console.log("entered loop", i)
+        // // console.log("entered loop", i)
         var order = {}
         var order_id = data.order_id
 
@@ -307,10 +307,9 @@ router.post('/get_orders', async (req, res, next) => {
         order["stage_title"] = stage_titles[data.stage]
         order["stage_description"] = stage_descriptions[data.stage]
 
+
         // get order items
         var order_items = await Orders.find({ order_id: order_id, valid: 1 })
-        // console.log("order items")
-        // console.log(order_items)
 
         var order_items_sendable = []
         var send_response = false
@@ -327,6 +326,7 @@ router.post('/get_orders', async (req, res, next) => {
             order_item_temp["product"] = await Products.findById(order_items[j]["prod_id"])
 
             order_items_sendable.push(order_item_temp)
+            // console.log("pushed order item", j)
 
             if (order_items_sendable.length == order_items.length) {
                 order["items"] = order_items_sendable
@@ -336,6 +336,7 @@ router.post('/get_orders', async (req, res, next) => {
                 if (response.length == order_sets.length) {
 
                     // sorting array
+                    // console.log("sorting array")
                     response.sort(GetSortOrder("order_date"))
 
                     return res.json({
@@ -360,7 +361,7 @@ router.post('/get_old_orders', async (req, res, next) => {
     user_id: (str)
     */
 
-    // console.log("entered route here")
+    // // console.log("entered route here")
 
     //initialization
     var user_id = req.query.user_id
@@ -380,7 +381,7 @@ router.post('/get_old_orders', async (req, res, next) => {
 
     // get the items of the order sets
     order_sets.forEach(async (data, i) => {
-        // console.log("entered loop", i)
+        // // console.log("entered loop", i)
         var order = {}
         var order_id = data.order_id
 
@@ -416,15 +417,15 @@ router.post('/get_old_orders', async (req, res, next) => {
             if (order_items_sendable.length == order_items.length) {
 
                 order["items"] = order_items_sendable
-                // console.log("pushing order", i)
-                // console.log(order)
+                // // console.log("pushing order", i)
+                // // console.log(order)
                 response.push(order)
                 if (response.length == order_sets.length) {
 
                     // sorting array
                     response.sort(GetSortOrder("order_date"))
 
-                    console.log(response)
+                    // console.log(response)
 
                     return res.json({
                         verdict: 1,

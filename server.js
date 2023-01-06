@@ -31,14 +31,14 @@ const Product = require("./models/Product")
 app.set("view engine", "ejs");
 
 app.get("/", (req, res, next) => {
-  console.log(req.query);
+  // console.log(req.query);
   res.send("Pre login");
 });
 app.get("/searchItem", async (req, res) => {
   let text = req.query.text;
   if (text) {
     const products = (await Product.find({}));
-    console.log(products)
+    // console.log(products)
     res.json({ mydata: products })
   }
   else {
@@ -70,7 +70,7 @@ const wishlist_handle = require('./routes/wishlist_handler')
 
 
 
-app.use("/activity",activityRouter)
+app.use("/activity", activityRouter)
 app.use("/carousel", carouselRouter)
 app.use("/categoryDefine", categoryDefine)
 app.use("/auth", authRouter)
@@ -80,7 +80,7 @@ app.use("/phoneVerify", phoneVerfiyRouter)
 app.use("/handleCartOps", handleCartOps)
 app.use("/products", productRouter);
 
-app.use("/wishlist",wishlist_handle);
+app.use("/wishlist", wishlist_handle);
 app.use("/search", searchRouter);
 app.use("/sessionManage", sessionRouter)
 app.use("/userInfo", userInfoRouter)

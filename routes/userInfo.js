@@ -17,7 +17,7 @@ async function is_session_alive(uuid, user_id) {
 
 router.post('/update_name', async (req, res, next) => {
 
-    console.log(req.query)
+    // console.log(req.query)
     // updates the name of the user 
 
     // initialization

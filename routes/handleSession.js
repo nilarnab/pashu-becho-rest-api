@@ -58,7 +58,7 @@ router.post('/create', async (req, res, next) => {
             )
         }
         else {
-            console.log("session does not exist")
+            // console.log("session does not exist")
         }
 
         // ----------------------------------------
@@ -189,7 +189,7 @@ router.post('/is_alive', async (req, res, next) => {
 
 router.post('/destroy', async (req, res, next) => {
 
-    console.log("reached endpoint")
+    // console.log("reached endpoint")
     if (req.query.user_id) {
 
         var user_id = req.query.user_id

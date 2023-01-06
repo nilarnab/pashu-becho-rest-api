@@ -4,17 +4,16 @@ const bcrypt = require("bcryptjs");
 const router = express.Router();
 const Wishlists = require('../models/Wishlists');
 const Products = require('../models/Product')
-const Activity =require("../models/Activity")
+const Activity = require("../models/Activity")
 require('dotenv').config();
 
 
 router.post("/showitems", async (req, res, next) => {
 
     var response = {}
-    console.log("entered route")
 
     if (req.query.user_id) {
-        console.log("user id present")
+
         var wishlist_items = await Wishlists.find({ user_id: req.query.user_id, valid: 1 })
 
         if (wishlist_items.length == 0) {
@@ -25,12 +24,10 @@ router.post("/showitems", async (req, res, next) => {
             })
         }
 
-        console.log("found some items")
         response["wishlist_items"] = []
         for (i = 0; i < wishlist_items.length; i++) {
             var product = await Products.findById(wishlist_items[i]["prod_id"])
 
-            console.log(wishlist_items[i])
 
             var prod_obj = {}
             prod_obj["product"] = product
@@ -39,7 +36,6 @@ router.post("/showitems", async (req, res, next) => {
 
             if (i == wishlist_items.length - 1) {
 
-                console.log("sending response")
                 return res.json({
                     verdict: 1,
                     response
@@ -132,8 +128,8 @@ router.post("/insert_item", async (req, res, next) => {
     inserts a new entry in the Wishlists for a user
 
     */
- console.log("insert item me");
-    if (req.query.user_id && req.query.prod_id ) {
+    // console.log("insert item me");
+    if (req.query.user_id && req.query.prod_id) {
 
         var user_id = req.query.user_id
         var prod_id = req.query.prod_id
@@ -141,7 +137,7 @@ router.post("/insert_item", async (req, res, next) => {
 
         var wishlist_ids = await Wishlists.find({ user_id: user_id, prod_id: prod_id, valid: 1 })
 
-         if (wishlist_ids.length > 0) {
+        if (wishlist_ids.length > 0) {
 
             var response = await Wishlists.findOneAndUpdate({
                 user_id: user_id,
@@ -164,11 +160,11 @@ router.post("/insert_item", async (req, res, next) => {
 
 
         var response = await new_wishlist.save()
-        try{
-            await (new Activity({action:"addedToWishlist",productID:prod_id,timestamp:Date.now(),userID:user_id})).save();
+        try {
+            await (new Activity({ action: "addedToWishlist", productID: prod_id, timestamp: Date.now(), userID: user_id })).save();
         }
-        catch(err){
-            console.log(err);
+        catch (err) {
+            // console.log(err);
             res.sendStatus(500);
         }
         return res.json({
@@ -190,7 +186,7 @@ router.post("/insert_item", async (req, res, next) => {
 
 
 
-router.delete("/remove/:wishlist_id",async (req, res, next) => {
+router.delete("/remove/:wishlist_id", async (req, res, next) => {
     const wishlist_id = req.params.wishlist_id;
     try {
         const Wishlist = await Wishlists.findById(wishlist_id);
@@ -203,10 +199,10 @@ router.delete("/remove/:wishlist_id",async (req, res, next) => {
         res.status(200).json({ 'message': 'Deletion completed successfully!' });
 
     } catch (error) {
-        console.log('error', error);
+        // console.log('error', error);
         res.status(500).json({ message: 'Delete failed!' });
     }
- })
+})
 
 
 module.exports = router

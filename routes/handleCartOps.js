@@ -8,7 +8,7 @@ const Users = require('../models/Users')
 const Otps = require('../models/Otps')
 const Carts = require('../models/Carts')
 const Products = require('../models/Product')
-const Activity =require("../models/Activity")
+const Activity = require("../models/Activity")
 var path = require('path');
 const { randomFillSync } = require('crypto');
 require('dotenv').config();
@@ -23,10 +23,9 @@ router.post("/show_items", async (req, res, next) => {
     */
 
     var response = {}
-    console.log("entered route")
 
     if (req.query.user_id) {
-        console.log("user id present")
+
         var cart_items = await Carts.find({ user_id: req.query.user_id, valid: 1 })
 
         if (cart_items.length == 0) {
@@ -37,13 +36,10 @@ router.post("/show_items", async (req, res, next) => {
             })
         }
 
-        console.log("foudn some items")
         response["cart_items"] = []
         for (i = 0; i < cart_items.length; i++) {
             var product = await Products.findById(cart_items[i]["prod_id"])
 
-            console.log(cart_items[i])
-            console.log(cart_items[i].qnt)
             var prod_obj = {}
             prod_obj["product"] = product
             prod_obj["qnt"] = cart_items[i].qnt
@@ -52,7 +48,6 @@ router.post("/show_items", async (req, res, next) => {
 
             if (i == cart_items.length - 1) {
 
-                console.log("sending response")
                 return res.json({
                     verdict: 1,
                     response
@@ -177,11 +172,11 @@ router.post("/insert", async (req, res, next) => {
         new_cart.qnt = req.query.qnt
 
         var response = await new_cart.save()
-        try{
-            await (new Activity({action:"addedToCart",productID:prod_id,timestamp:Date.now(),userID:user_id})).save();
+        try {
+            await (new Activity({ action: "addedToCart", productID: prod_id, timestamp: Date.now(), userID: user_id })).save();
         }
-        catch(err){
-            console.log(err);
+        catch (err) {
+            // console.log(err);
             res.sendStatus(500);
         }
         return res.json({
@@ -210,10 +205,10 @@ router.post("/alter", async (req, res, next) => {
     changes the qnt value of a cart item
     
     */
-    console.log("request to alter quantity ",req.query);
-    if (req.query.cart_id && req.query.qnt_new!==undefined) {
+    // console.log("request to alter quantity ", req.query);
+    if (req.query.cart_id && req.query.qnt_new !== undefined) {
 
-        console.log(req.query," all fine")
+        // console.log(req.query, " all fine")
         var cart_ids = await Carts.find({ _id: req.query.cart_id, valid: 1 })
 
         try {
@@ -226,7 +221,7 @@ router.post("/alter", async (req, res, next) => {
             }
         }
         catch (err) {
-            console.log(err);
+            // console.log(err);
         }
 
         var response = await Carts.findByIdAndUpdate(req.query.cart_id, { qnt: req.query.qnt_new })

@@ -26,18 +26,18 @@ router.get("/", async (req, res) => {
         res.send({ token: token })
     }
     catch (err) {
-        console.log(err);
+        // console.log(err);
     }
 });
 
 router.get("/authComplete", async (req, res) => {
     const token = req.query.token;
     const uid = req.query.uid;
-    console.log("completing", token, uid)
+    // console.log("completing", token, uid)
     try {
         const arr = await VerifyToken.find({ token: token })
         if (arr.length === 1) {
-            console.log(arr)
+            // console.log(arr)
             await VerifyToken.updateOne({ token: token }, {
                 $set: { verified: true, uid: uid }
             })
@@ -49,7 +49,7 @@ router.get("/authComplete", async (req, res) => {
         }
     }
     catch (err) {
-        console.log(err);
+        // console.log(err);
         res.sendStatus(404);
     }
 })
@@ -92,7 +92,7 @@ router.get('/reset_otp', async (req, res, next) => {
     var mobile_no = req.query.phone_num
     var pin = random_pin
 
-    console.log(mobile_no, pin)
+    // console.log(mobile_no, pin)
 
     await Otps.deleteMany({
         phone_num: mobile_no
@@ -126,17 +126,17 @@ function sendOTP(mobileNo, OTP) {
         apiVersion: '2010– 03– 31'
     }).publish(params).promise()
         .then(message => {
-            console.log("OTP SEND SUCCESS");
+            // console.log("OTP SEND SUCCESS");
         })
         .catch(err => {
-            console.log("Error " + err)
+            // console.log("Error " + err)
             return err;
         });
 }
 
 
 router.post('/send_message', async (req, res, next) => {
-    console.log("sending message")
+    // console.log("sending message")
     sendOTP()
 
 })
@@ -158,7 +158,7 @@ router.get("/verify_otp", async (req, res, next) => {
         phone_num: phone_num
     })
 
-    console.log(current_pin)
+    // console.log(current_pin)
 
     if (current_pin.length > 0) {
         if (pin == current_pin[0]["pin"]) {

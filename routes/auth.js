@@ -15,7 +15,7 @@ router.get("/test", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   var user = await Users.find({ email: req.query.email });
-  console.log(user);
+  // console.log(user);
 
   if (user.length == 1) {
     var verdict = await bcrypt.compare(req.query.password, user[0].password);
@@ -134,7 +134,7 @@ async function check_phone(phone) {
   }
 }
 
-async function send_sms(phone) {}
+async function send_sms(phone) { }
 
 // Google Auth
 
@@ -194,37 +194,37 @@ module.exports = router;
 
 // post request, data ---> phone number , null name, null email
 
-router.post("/numberVerification", async (req,res,next) => {
-  try{
-    const user = await Users.find({phone:req.query.phone})
-  
-  if (user.length != 0){
-    return res.status(200).json({
-      message:"This number already exists !",
-      data:{
-        user
-      }
-    })
-  }
-  else{
-    const newUser = await Users.create({
-      phone:req.query.phone,
-      name:"Null"+Math.random(),
-      email:"Null"+Math.random(),
-      password:"Null"+Math.random(),
-    })
-    return res.status(200).json({
-      verdict:1,
-      message:"New user has been created",
-      data:{
-        newUser
-      }
-    })
-  }
-  }catch(error){
+router.post("/numberVerification", async (req, res, next) => {
+  try {
+    const user = await Users.find({ phone: req.query.phone })
+
+    if (user.length != 0) {
+      return res.status(200).json({
+        message: "This number already exists !",
+        data: {
+          user
+        }
+      })
+    }
+    else {
+      const newUser = await Users.create({
+        phone: req.query.phone,
+        name: "Null" + Math.random(),
+        email: "Null" + Math.random(),
+        password: "Null" + Math.random(),
+      })
+      return res.status(200).json({
+        verdict: 1,
+        message: "New user has been created",
+        data: {
+          newUser
+        }
+      })
+    }
+  } catch (error) {
     return res.status(400).json({
-      verdict:0,
-      message:"Somethinng wrong occured !"
+      verdict: 0,
+      message: "Somethinng wrong occured !"
     })
   }
 })
