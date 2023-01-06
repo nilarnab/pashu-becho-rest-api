@@ -10,7 +10,7 @@ const Carts = require('../models/Carts')
 const Products = require('../models/Product')
 const Orders = require('../models/Orders')
 const OrderSets = require('../models/OrderSets')
-const Activity=require("../models/Activity")
+const Activity = require("../models/Activity")
 var path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const { randomFillSync } = require('crypto');
@@ -140,10 +140,10 @@ router.post("/place_by_cart", async (req, res, next) => {
         temp_item["user_id"] = data.user_id
         temp_item["prod_id"] = data.prod_id
         temp_item["qnt"] = data.qnt
-        try{
-            await (new Activity({action:"ordered",productID:data.prod_id,timestamp:Date.now(),userID:data.user_id})).save();
+        try {
+            await (new Activity({ action: "ordered", productID: data.prod_id, timestamp: Date.now(), userID: data.user_id })).save();
         }
-        catch(err){
+        catch (err) {
             console.log(err);
         }
 
@@ -156,7 +156,7 @@ router.post("/place_by_cart", async (req, res, next) => {
 
             // invalidating cart items
             var response = await Carts.updateMany({ user_id: user_id, valid: 1 }, { valid: 0 })
-            
+
             return res.json({
                 verdict: 1,
                 response
@@ -165,6 +165,89 @@ router.post("/place_by_cart", async (req, res, next) => {
     })
 
 
+
+
+})
+
+
+router.post("/place_by_item", async (req, res, next) => {
+    /*
+    Accepts parameters
+    user_id: (str)
+    prod_id: (str)
+    lat: (float)
+    long: (float)
+    loc1: (str)
+    loc2: (str)
+    pin: (str)
+    city: (str)
+
+    place order by cart items, and makes the entries of the cart invalid
+
+    */
+    console.log("placing order by item")
+
+    // initialization
+    var user_id = req.query.user_id
+    var prod_id = req.query.prod_id
+    var lat = req.query.lat
+    var long = req.query.long
+    var loc1 = req.query.loc1
+    var loc2 = req.query.loc2
+    var pin = req.query.pin
+    var city = req.query.city
+
+    console.log(user_id, prod_id, lat, long, loc1, loc2, pin, city)
+
+
+    if (user_id == null || prod_id == null || lat == null || long == null || loc1 == null || loc2 == null || pin == null || city == null) {
+        return res.json({
+            verdict: 0,
+            message: "Missing parameters"
+        })
+    }
+
+    // get all the valid cart items
+    // var cart_items = await Carts.find({ user_id: user_id, valid: 1 })
+
+    // if (cart_items.length == 0) {
+    //     return res.json({
+    //         verdict: 1,
+    //         message: "No items in cart",
+    //         response: null
+    //     })
+    // }
+
+    // adding cart items to order
+    var order_id = uuidv4()
+    // make a new order Set
+    var response = await OrderSets.insertMany({
+        order_id: order_id,
+        user_id: user_id,
+        timestamp: Date.now(),
+        location: {
+            type: 'Point',
+            coordinates: [long, lat]
+        },
+        loc1: loc1,
+        loc2: loc2,
+        pin: pin,
+        city: city,
+    })
+
+    var response = await Orders.insertMany(
+        {
+            order_id: order_id,
+            user_id: user_id,
+            prod_id: prod_id,
+            qnt: 1
+        }
+    )
+
+    return res.json({
+        verdict: 1,
+        response
+    })
 
 
 })
