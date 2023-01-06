@@ -6,7 +6,7 @@ const { query } = require("express");
 
 router.post("/createProducts", async (req, res, next) => {
   try {
-    console.log(req.query);
+    // console.log(req.query);
     const createProduct = await Product.create(req.query);
     return res.status(201).json({
       status: "Success",
@@ -36,17 +36,15 @@ router.get("/getAllProducts", async (req, res, next) => {
   }
 });
 
-router.get("/get_product", async (req, res, next) => 
-{
+router.get("/get_product", async (req, res, next) => {
 
   try {
-    
-    if (req.query.prod_id)
-    {
+
+    if (req.query.prod_id) {
 
       var prod_id = req.query.prod_id
-      console.log(prod_id)
-      
+      // console.log(prod_id)
+
       var prod = await Product.findById(prod_id)
 
       var image = await ProdResource.find({
@@ -55,11 +53,10 @@ router.get("/get_product", async (req, res, next) =>
         type: 'IMG'
       })
 
-      console.log(image[0]['url'])
+      // console.log(image[0]['url'])
 
-      if (image.length)
-      {
-        prod['image'] = image[0]['url'] 
+      if (image.length) {
+        prod['image'] = image[0]['url']
       }
       // prod['image'] = 'image'
 
@@ -68,7 +65,7 @@ router.get("/get_product", async (req, res, next) =>
         data: prod,
         message: 'Found prod'
       })
-      
+
     }
     else {
 
@@ -84,12 +81,12 @@ router.get("/get_product", async (req, res, next) =>
       message: "Something went wrong !",
     });
   }
-  
+
 })
 
 router.get("/infiniteScroll/:page", async (req, res, next) => {
-  console.log("got")
-  console.log(req.params)
+  // console.log("got")
+  // console.log(req.params)
   const page = req.params.page * 1 || 1;
   const limit = 4;
   const skip_val = (page - 1) * limit * 1;
@@ -98,7 +95,7 @@ router.get("/infiniteScroll/:page", async (req, res, next) => {
 
   query.forEach(async (item, index) => {
 
-    console.log(item._id.toString())
+    // console.log(item._id.toString())
 
     var image = await ProdResource.find({
       prod_id: item._id.toString(),
@@ -106,22 +103,20 @@ router.get("/infiniteScroll/:page", async (req, res, next) => {
       type: 'IMG'
     })
 
-    
+
 
     var image_val = 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-collection-1_large.png?format=webp&v=1530129113'
 
-    if (image.length)
-    {
-      image_val = image[0]['url'] 
+    if (image.length) {
+      image_val = image[0]['url']
     }
 
     query[index].image_val = image_val
 
 
 
-    if (index == query.length - 1)
-    {
-      
+    if (index == query.length - 1) {
+
       if (query.length == 0) {
         return res.status(200).json({
           message: "Success",
@@ -139,7 +134,7 @@ router.get("/infiniteScroll/:page", async (req, res, next) => {
     }
   });
 
-  
+
 
   try {
   } catch (err) {

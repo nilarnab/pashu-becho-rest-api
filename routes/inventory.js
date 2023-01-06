@@ -28,7 +28,7 @@ const sch = {
 const monmodel = mongoose.model("NEWCOL", sch);
 
 router.post("/insert", async (req, res) => {
-    console.log("inside post function");
+    // console.log("inside post function");
     const data = new monmodel({
         name: req.body.name,
         price: req.body.price,
@@ -43,7 +43,7 @@ router.post("/insert", async (req, res) => {
 });
 
 router.delete("/delete/:name", async (req, res) => {
-    console.log("inside delete function");
+    // console.log("inside delete function");
 
     let delname = req.params.name;
     monmodel.findOneAndDelete({ name: delname }, function (err, docs) {
@@ -52,7 +52,7 @@ router.delete("/delete/:name", async (req, res) => {
 });
 
 router.put("/update/:name", async (req, res) => {
-    console.log("inside update function");
+    // console.log("inside update function");
 
     let upname = req.params.name;
     let upprice = req.body.price;
