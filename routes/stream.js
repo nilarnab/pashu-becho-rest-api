@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const router = express.Router();
 const Users = require('../models/Users')
 const Resource = require('../models/Resource');
+const Activity=require("../models/Activity");
 var path = require('path');
 const { resourceUsage } = require('process');
 require('dotenv').config();
@@ -23,10 +24,21 @@ router.get('/get_video', async (req, res, next) => {
 
 router.get('/getResources', async (req, res) => {
     let id = req.query.pid;
-    if (!id) {
+    let userID=req.query.uid;
+    if (!id || userID) {
         return res.sendStatus(403);
     }
     try {
+
+        //browsed activity
+        try {
+            await (new Activity({ action: "browsed", productID: id, timestamp: Date.now(), userID: userID })).save();
+        }
+        catch (err) {
+            // console.log(err);
+            res.sendStatus(500);
+        }
+
         const resources = await Resource.find({ productID: id });
 
         // console.log("sending resources : - ",id,resources);
