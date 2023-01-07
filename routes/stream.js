@@ -35,8 +35,8 @@ router.get('/getResources', async (req, res) => {
             await (new Activity({ action: "browsed", productID: id, timestamp: Date.now(), userID: userID })).save();
         }
         catch (err) {
-            // console.log(err);
-            res.sendStatus(500);
+            console.log(err);
+            // res.sendStatus(500);
         }
 
         const resources = await Resource.find({ productID: id });
