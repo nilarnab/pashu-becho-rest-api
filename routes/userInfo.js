@@ -1,4 +1,6 @@
 const express = require("express");
+const Activity = require("../models/Activity");
+const Product = require("../models/Product");
 const router = express.Router();
 const Sessions = require("../models/Sessions");
 const Users = require("../models/Users");
@@ -70,6 +72,23 @@ router.post('/get_by_phone', async (req, res, next) => {
             message: "Invalid fields"
         })
     }
+})
+
+router.get("/fetchVisited",async(req,res)=>{
+    let uid=req.query.uid;
+    console.log(uid);
+    if(!uid){
+        return res.sendStatus(403);
+    }
+    ans=[]
+    const data=await Activity.find({userID:uid,action:"browsed"},{productID:1,_id:0}).limit(5);
+    for(var i=0;i<data.length;i++){
+        data[i]=data[i].productID;
+    }
+    // console.log(data)
+    let prod=await Product.find({_id:{$in:data}})    
+    // console.log(prod);
+    res.json(prod);
 })
 
 
