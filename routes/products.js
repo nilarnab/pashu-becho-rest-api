@@ -144,4 +144,52 @@ router.get("/infiniteScroll/:page", async (req, res, next) => {
   }
 });
 
+router.get("/get_one_product", async (req, res, next) => {
+
+  console.log('reached')
+  console.log(req.query)
+
+  // initialization 
+  var prodId = req.query.prodId
+
+  if (prodId != null) {
+    // getting product
+    var products = await Product.findById(prodId)
+
+    if (products) {
+      return res.json(
+        {
+          verdict: 1,
+          response: {
+            cart_items: [
+              {
+                product: products,
+                qnt: 1
+              }
+            ]
+          }
+        }
+      )
+    }
+    else {
+      return res.json(
+        {
+          verdict: 0,
+          message: 'Product not found'
+        }
+      )
+    }
+  }
+  else {
+    return res.json(
+      {
+        verdict: 0,
+        message: 'Invalid fields'
+      }
+    )
+  }
+
+
+})
+
 module.exports = router;

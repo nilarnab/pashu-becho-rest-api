@@ -36,33 +36,31 @@ router.post("/show_items", async (req, res, next) => {
             })
         }
 
-        response["cart_items"] = []
-        for (i = 0; i < cart_items.length; i++) {
+        response["cart_items"] = null
+
+        var cart_items_sendable = []
+
+        cart_items.forEach(async (data, i) => {
             var product = await Products.findById(cart_items[i]["prod_id"])
 
             var prod_obj = {}
             prod_obj["product"] = product
             prod_obj["qnt"] = cart_items[i].qnt
             prod_obj["cart_id"] = cart_items[i]._id
-            response["cart_items"].push(prod_obj)
 
-            if (i == cart_items.length - 1) {
+            cart_items_sendable.push(prod_obj)
+
+            if (cart_items_sendable.length == cart_items.length) {
+
+                response["cart_items"] = cart_items_sendable
 
                 return res.json({
                     verdict: 1,
                     response
                 })
-
-
             }
-        }
 
-        // cart_items.forEach(async (data, i) => {
-        //     cart_items[i]["product"] = await Product.findById(req.query.user_id)
-        // })
-
-
-
+        })
 
     }
     else {
