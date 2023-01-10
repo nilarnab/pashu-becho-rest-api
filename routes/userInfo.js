@@ -81,14 +81,35 @@ router.get("/fetchVisited",async(req,res)=>{
         return res.sendStatus(403);
     }
     ans=[]
-    const data=await Activity.find({userID:uid,action:"browsed"},{productID:1,_id:0}).limit(5);
+    const data=await Activity.find({userID:uid,action:"browsed"},{productID:1,_id:0}).sort({timestamp:-1}).limit(5);
     for(var i=0;i<data.length;i++){
         data[i]=data[i].productID;
     }
-    // console.log(data)
-    let prod=await Product.find({_id:{$in:data}})    
+    // console.log("data",data)
+    const fetch=async(data)=>{
+        const ans=[]
+        data.map(async(id,index)=>{
+            let el=await Product.findById(id,{image:1})
+            if(index==4){
+                ans.push(el);
+                // console.log(ans);
+                res.json(ans);
+            }
+            else{
+                ans.push(el)
+            }
+        })
+    }
+    try{
+    fetch(data);
+    }
+    catch(err){
+        res.sendStatus(500);
+        console.log(err);
+    }
+    // let prod=await Product.find({_id:{$in:data}},{image:1})    
     // console.log(prod);
-    res.json(prod);
+    
 })
 
 

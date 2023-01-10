@@ -25,7 +25,7 @@ router.get('/get_video', async (req, res, next) => {
 router.get('/getResources', async (req, res) => {
     let id = req.query.pid;
     let userID=req.query.uid;
-    // console.log(id,userID)
+    console.log(id,userID)
     if (!id || !userID) {
         return res.sendStatus(403);
     }
@@ -34,6 +34,7 @@ router.get('/getResources', async (req, res) => {
         //browsed activity
         try {
             const resp=await (new Activity({ action: "browsed", productID: id, timestamp: Date.now(), userID: userID })).save();
+            console.log("added");
         }
         catch (err) {
             console.log(err);
