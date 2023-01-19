@@ -51,6 +51,47 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination(req, file, callback) {
+    callback(null, './uploads');
+  },
+  filename(req, file, callback) {
+    callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
+  },
+});
+
+
+const upload = multer({ storage });
+app.get('/', (req, res) => {
+  res.status(200).send('You can post to /api/upload.');
+});
+
+app.post('/api/upload', upload.fields([{name:"photo",maxCount:3},{name:"video",maxCount:1}]), (req, res) => {
+  console.log(req.body);
+  res.status(200).json({
+    message: 'success!',
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const authRouter = require('./routes/auth.js');
 const streamRouter = require('./routes/stream.js');
 const phoneVerfiyRouter = require('./routes/phoneVerify');
